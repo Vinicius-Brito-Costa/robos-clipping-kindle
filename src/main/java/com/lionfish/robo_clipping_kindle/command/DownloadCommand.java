@@ -1,8 +1,10 @@
 ﻿package com.lionfish.robo_clipping_kindle.command;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import com.lionfish.robo_clipping_kindle.domain.BookClippings;
 import com.lionfish.robo_clipping_kindle.domain.Clipping;
 import com.lionfish.robo_clipping_kindle.domain.DefaultClippingTemplate;
 import com.lionfish.robo_clipping_kindle.domain.IClippingTemplate;
@@ -18,18 +20,26 @@ import com.lionfish.robo_clipping_kindle.service.ClippingService;
 public class DownloadCommand implements ICommand{
 
     @Override
-    public List<Clipping> execute(Object object) {
+    public HashMap<String, List<Clipping>> execute(Object object) {
         IClippingTemplate template = new DefaultClippingTemplate();
-        List<Clipping> formatedLines = new ArrayList<>();
+        HashMap<String, List<Clipping>> bookClippings = new HashMap<>();
         for(List<String> clipp : ClippingService.getClippings((String) object)){
             List<String> cleanedClipping = ClippingService.removeEmptyBlankAndInvalid(clipp);
             if(ClippingService.removeClipping(cleanedClipping)){
                 continue;
             }
-
-            formatedLines.add(template.formatClipping(cleanedClipping));
+            Clipping formatedClipping = template.formatClipping(cleanedClipping);
+            String clippingTitle = formatedClipping.getTitle();
+            List<Clipping> currentClippings = bookClippings.get(clippingTitle);
+            if(currentClippings != null){
+                currentClippings.add(formatedClipping);
+                continue;
+            }
+            currentClippings = new ArrayList<>();
+            currentClippings.add(formatedClipping);
+            bookClippings.put(clippingTitle, currentClippings);
         }
-        return formatedLines;
+        return bookClippings;
     }
     
 }

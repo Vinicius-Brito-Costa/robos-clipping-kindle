@@ -12,27 +12,22 @@ public class DefaultClippingTemplate implements IClippingTemplate{
     public Clipping formatClipping(List<String> clipping) {
         Clipping createdClipping = new Clipping();
         createdClipping.setTitle(clipping.get(0));
-        String[] infoList = clipping.get(1).split(" \\| ");
+        String[] infoList = clipping.get(1).split(INFO_SEPARATOR);
         // Check's if info list contains page information.
         if(infoList.length > 2){
-            createdClipping.setPage(formatClippingPage(infoList[0]));
-            createdClipping.setPosition(formatClippingPosition(infoList[1]));
+            createdClipping.setPage(Integer.parseInt(formatClippingInfo(infoList[0])));
+            createdClipping.setPosition(formatClippingInfo(infoList[1]));
         }
         else{
-            createdClipping.setPosition(formatClippingPosition(infoList[0]));
+            createdClipping.setPosition(formatClippingInfo(infoList[0]));
         }
         createdClipping.setDate(formatClippingDate(infoList[infoList.length - 1]));
         createdClipping.setHighlight(clipping.get(2));
         return createdClipping;
     }
 
-    public static int formatClippingPage(String raw){
-        String[] separetaredWords = raw.split(" ");
-        return Integer.parseInt(separetaredWords[separetaredWords.length - 1]);
-    }
-
-    public static String formatClippingPosition(String raw){
-        String[] separetaredWords = raw.split(" ");
+    public static String formatClippingInfo(String raw){
+        String[] separetaredWords = raw.split(SPACE);
         return separetaredWords[separetaredWords.length - 1];
     }
     
@@ -49,7 +44,7 @@ public class DefaultClippingTemplate implements IClippingTemplate{
         if(splitUnformatedDate.length > 4){
             splitUnformatedDate = Arrays.copyOfRange(splitUnformatedDate, 0, 4);
         }
-        formatedDate = String.join(" ", splitUnformatedDate);
+        formatedDate = String.join(SPACE, splitUnformatedDate);
         
         SimpleDateFormat formatter = ClippingDateEnum.getDateFormat(clippingDateEnum);
         Date date = null;
