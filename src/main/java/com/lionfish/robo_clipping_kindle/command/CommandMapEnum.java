@@ -4,7 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 public enum CommandMapEnum {
-    Download("download", "DownloadCommand");
+    Download("download", "DownloadCommand"),
+    Notion("notion", "NotionCommand");
 
     private static HashMap<String, String> commandMap;
     private final static String FQN = "com.lionfish.robo_clipping_kindle.command.";

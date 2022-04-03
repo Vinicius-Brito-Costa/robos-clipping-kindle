@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.lionfish.robo_clipping_kindle.domain.BookClippings;
-import com.lionfish.robo_clipping_kindle.domain.Clipping;
-import com.lionfish.robo_clipping_kindle.domain.DefaultClippingTemplate;
-import com.lionfish.robo_clipping_kindle.domain.IClippingTemplate;
+import com.lionfish.robo_clipping_kindle.domain.Clipping.Clipping;
+import com.lionfish.robo_clipping_kindle.domain.Template.DefaultClippingTemplate;
+import com.lionfish.robo_clipping_kindle.domain.Template.IClippingTemplate;
 import com.lionfish.robo_clipping_kindle.service.ClippingService;
 
 /**
