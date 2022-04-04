@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 public enum CommandMapEnum {
+    Response("response", "ResponseCommand"),
     Download("download", "DownloadCommand"),
     Notion("notion", "NotionCommand");
 
