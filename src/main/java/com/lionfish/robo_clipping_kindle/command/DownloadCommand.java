@@ -38,6 +38,9 @@ public class DownloadCommand implements ICommand{
             currentClippings.add(formatedClipping);
             bookClippings.put(clippingTitle, currentClippings);
         }
+        if(bookClippings.size() < 1){
+            
+        }
         return bookClippings;
     }
     

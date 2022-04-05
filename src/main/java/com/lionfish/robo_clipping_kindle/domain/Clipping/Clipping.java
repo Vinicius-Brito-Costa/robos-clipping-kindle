@@ -2,6 +2,10 @@
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import lombok.Data;
 
 /**
@@ -12,8 +16,11 @@ import lombok.Data;
 @Data
 public class Clipping {
 
+    @JsonIgnore
     private String title;
+    @JsonInclude(Include.NON_NULL)
     private Integer page;
+    @JsonInclude(Include.NON_NULL)
     private String position;
     private Date date;
     private String highlight;

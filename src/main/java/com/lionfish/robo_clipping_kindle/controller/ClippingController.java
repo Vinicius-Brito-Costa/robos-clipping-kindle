@@ -1,12 +1,14 @@
 ﻿package com.lionfish.robo_clipping_kindle.controller;
 
+import java.util.HashMap;
+
 import javax.websocket.server.PathParam;
 
 import com.lionfish.robo_clipping_kindle.command.CommandMapEnum;
 import com.lionfish.robo_clipping_kindle.command.ICommand;
 import com.lionfish.robo_clipping_kindle.controller.Response.ResponseMap;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +37,8 @@ public class ClippingController {
      * @return byte[]
      */
     @PostMapping("/export")
+    @SuppressWarnings("unchecked")
+    @CrossOrigin
     public Object exportClippings(@PathParam(value = "command") String command, @RequestBody String data){
         ICommand comm = CommandMapEnum.getCommandClass(command);
         ResponseMap responseMap;
@@ -42,8 +46,12 @@ public class ClippingController {
             responseMap = ResponseMap.BAD_REQUEST;
             return responseCommand.execute(responseMap);
         }
-        responseMap = ResponseMap.OK;
-        responseMap.setResponseDataBody(comm.execute(data));
+        HashMap<Object, Object> commandResponse = (HashMap<Object, Object>) comm.execute(data);
+        responseMap = ResponseMap.BAD_REQUEST;
+        if(commandResponse != null && commandResponse.size() > 0){
+            responseMap = ResponseMap.OK;
+            responseMap.setResponseDataBody(commandResponse);
+        }
         return responseCommand.execute(responseMap);
     }
 }
