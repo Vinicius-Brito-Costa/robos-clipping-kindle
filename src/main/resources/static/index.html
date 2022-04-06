@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #dowload-button{
+            text-decoration: none;
+        }
+        #download-button button{
+
+        }
+    </style>
+    <title>Document</title>
+    
+</head>
+<body>
+    <div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event)" style="background-color: blueviolet; color: white; height: 200px">
+        <p>Drag your 'My Clippings.txt' file here.</p>
+    </div>
+    <script>
+        
+        async function download(data) {
+            let headers = new Headers();
+            headers.append("Content-Type", "text/html");
+            let options = {
+                method: "POST",
+                headers: headers,
+                body: data
+            }
+
+            await fetch("http://localhost:8080/robo/api/v1/export?command=download", options)
+            .then(res => {
+                if(res.ok){
+                    return res.text();
+                }
+                throw new Error(res.text());
+            })
+            .then(res => {
+                let anchor = document.getElementById('download-button');
+                if(anchor == undefined){
+                    anchor = document.createElement('a');
+                    anchor.id = 'download-button';
+                    document.body.appendChild(anchor);
+                    let button = document.createElement('button');
+                    button.className = "dowload-button";
+                    button.type = "button";
+                    button.innerText = "DOWNLOAD!";
+                    anchor.appendChild(button);
+                }
+                anchor.setAttribute('href', "data:application/json;charset=utf-8," + encodeURIComponent(res));
+                anchor.setAttribute('download', "arquivo.json");
+            })
+            .catch(err => {
+                console.log("deu ruim")
+            });
+            
+            
+        }
+        async function dropHandler(event){
+            event.preventDefault()
+
+            if (event.dataTransfer.items) {
+                if (event.dataTransfer.items[0].kind === 'file') {
+                var file = event.dataTransfer.items[0].getAsFile();
+                reader = new FileReader();
+                reader.onload = e => readerHandler(e);
+                reader.readAsText(file);
+                }
+              }
+              return true;
+        }
+        function dragOverHandler(ev) {
+            ev.preventDefault();
+        }
+
+        function readerHandler(event){
+            let result = event.currentTarget.result;
+            download(result);
+        }
+    </script>
+</body>
+</html>
