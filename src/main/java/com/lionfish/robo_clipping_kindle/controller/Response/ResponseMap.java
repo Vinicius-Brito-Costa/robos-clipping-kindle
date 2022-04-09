@@ -1,4 +1,4 @@
-﻿package com.lionfish.robo_clipping_kindle.controller.Response;
+package com.lionfish.robo_clipping_kindle.controller.Response;
 
 import org.springframework.http.HttpStatus;
 

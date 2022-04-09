@@ -1,4 +1,4 @@
-﻿package com.lionfish.robo_clipping_kindle.command;
+package com.lionfish.robo_clipping_kindle.command;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;

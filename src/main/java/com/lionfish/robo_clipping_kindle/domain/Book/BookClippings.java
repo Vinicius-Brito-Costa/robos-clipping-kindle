@@ -1,4 +1,4 @@
-﻿package com.lionfish.robo_clipping_kindle.domain.Book;
+package com.lionfish.robo_clipping_kindle.domain.Book;
 
 import java.util.List;
 

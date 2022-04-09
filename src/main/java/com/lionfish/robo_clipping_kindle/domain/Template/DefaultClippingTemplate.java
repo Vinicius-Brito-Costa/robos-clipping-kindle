@@ -1,4 +1,4 @@
-﻿package com.lionfish.robo_clipping_kindle.domain.Template;
+package com.lionfish.robo_clipping_kindle.domain.Template;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

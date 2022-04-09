@@ -1,4 +1,4 @@
-﻿package com.lionfish.robo_clipping_kindle.controller;
+package com.lionfish.robo_clipping_kindle.controller;
 
 import java.util.HashMap;
 
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -53,5 +54,14 @@ public class ClippingController {
             responseMap.setResponseDataBody(commandResponse);
         }
         return responseCommand.execute(responseMap);
+    }
+
+    @PostMapping("/exportMulti")
+    @CrossOrigin
+    public Object exportClippingsMulti(@PathParam(value = "command") String command, @RequestBody String data){
+        ICommand comm = CommandMapEnum.getCommandClass(command);
+        ResponseMap responseMap;
+        System.out.println("yea");
+        return "responseCommand.execute(responseMap)";
     }
 }

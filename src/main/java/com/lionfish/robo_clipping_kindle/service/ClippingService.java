@@ -1,4 +1,4 @@
-﻿package com.lionfish.robo_clipping_kindle.service;
+package com.lionfish.robo_clipping_kindle.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
