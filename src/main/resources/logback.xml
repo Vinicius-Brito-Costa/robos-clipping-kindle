@@ -1,0 +1,28 @@
+<configuration>
+    <appender name="Default" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [ %-5level][%thread][%logger{0}]%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <property name="LOG_NAME" value="LoggedData" />
+    <property name="LOG_PATH" value="./log/" />
+    <property name="LOG_ARCHIVE_PATH" value="./log/archive/" />
+    <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}${LOG_NAME}.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ARCHIVE_PATH}${LOG_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+            <totalSizeCap>50MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [ %-5level][%thread][%logger{0}]%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="Default" />
+        <appender-ref ref="File" />
+    </root>
+</configuration>
