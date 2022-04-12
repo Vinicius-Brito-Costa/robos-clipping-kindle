@@ -36,12 +36,12 @@ public class DefaultClippingTemplate implements IClippingTemplate{
     
     /**
      * Format clipping date string, to default Date object
-     * @param date
-     * @return
+     * @param rawDate raw date string  returned in 'My Clippings' file
+     * @return date fate formated in Java Date()
      */
     public static Date formatClippingDate(String rawDate){
         ClippingDateEnum clippingDateEnum = ClippingDateEnum.getClippingDate(rawDate);
-        String formatedDate = "";
+        String formatedDate;
 
         String[] splitUnformatedDate = rawDate.substring(rawDate.indexOf(", ") + 1).strip().split(clippingDateEnum.getSeparator());
         if(splitUnformatedDate.length > 4){

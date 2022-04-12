@@ -1,5 +1,8 @@
 package com.lionfish.robo_clipping_kindle.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,6 +12,7 @@ import java.util.List;
  */
 public class ClippingService {
 
+    private static final Logger logger = LoggerFactory.getLogger(ClippingService.class);
     public static final String CLIPP_SEPARATOR = "==========";
     public static final String BREAK_ROW = "\n";
 
@@ -19,9 +23,8 @@ public class ClippingService {
      * @return String List: List containing clippings
      */
     public static List<List<String>> getClippings(String clippings){
-        String[] clipps = clippings.split(CLIPP_SEPARATOR);
         List<List<String>> clippsAndLines = new ArrayList<>();
-        for(String clipp : clipps){
+        for(String clipp : splitClippings(clippings)){
             clippsAndLines.add(Arrays.asList(clipp.split(BREAK_ROW)));
         }
         return clippsAndLines;
@@ -30,7 +33,7 @@ public class ClippingService {
     /**
      * Verify if clipping should be removed.
      * It's recommended this method after cleaning the list. 
-     * @param clipp
+     * @param clipp list of clippings
      * @return boolean: Clipping is apt to be removed
      */
     public static boolean removeClipping(List<String> clipp){
@@ -41,7 +44,7 @@ public class ClippingService {
      * Cleans provided list by removing any list item that 
      * is empty, blank or contains only \n and remove from 
      * resulting string invalid characters
-     * @param List<String>
+     * @param list list of clips
      * @return String List
      */
     public static List<String> removeEmptyBlankAndInvalid(List<String> list){
@@ -56,5 +59,9 @@ public class ClippingService {
             cleanedList.add(cleanedListItem);
         }
         return cleanedList;
+    }
+
+    public static String[] splitClippings(String clippings){
+        return clippings.split(CLIPP_SEPARATOR);
     }
 }

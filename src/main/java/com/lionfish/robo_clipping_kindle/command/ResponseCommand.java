@@ -12,14 +12,16 @@ public class ResponseCommand implements ICommand {
     @Override
     public ResponseEntity<Object> execute(Object object) {
         ResponseMap map = (ResponseMap) object;
-        return ResponseEntity
+        ResponseEntity<Object> response =  ResponseEntity
             .status(map.getResponse().getStatus())
             .body(new ResponseDAO(map.getResponse().getCode(), map.getResponse().getBody()));
+        map.setResponseDataBody(null);
+        return response;
     }
     
     @Data
     @AllArgsConstructor
-    class ResponseDAO{
+    static class ResponseDAO{
         private String code;
         private Object data;
     }

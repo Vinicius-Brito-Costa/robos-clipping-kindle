@@ -8,6 +8,8 @@ import com.lionfish.robo_clipping_kindle.domain.Clipping.Clipping;
 import com.lionfish.robo_clipping_kindle.domain.Template.DefaultClippingTemplate;
 import com.lionfish.robo_clipping_kindle.domain.Template.IClippingTemplate;
 import com.lionfish.robo_clipping_kindle.service.ClippingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Return clippings formated in a file for download
@@ -18,11 +20,16 @@ import com.lionfish.robo_clipping_kindle.service.ClippingService;
  */
 public class DownloadCommand implements ICommand{
 
+    private static final Logger logger = LoggerFactory.getLogger(DownloadCommand.class);
+
     @Override
     public HashMap<String, List<Clipping>> execute(Object object) {
         IClippingTemplate template = new DefaultClippingTemplate();
+        logger.info("[Message] Clipping template: Default");
         HashMap<String, List<Clipping>> bookClippings = new HashMap<>();
+        int totalClippings = 0;
         for(List<String> clipp : ClippingService.getClippings((String) object)){
+            totalClippings += clipp.size();
             List<String> cleanedClipping = ClippingService.removeEmptyBlankAndInvalid(clipp);
             if(ClippingService.removeClipping(cleanedClipping)){
                 continue;
@@ -38,9 +45,8 @@ public class DownloadCommand implements ICommand{
             currentClippings.add(formatedClipping);
             bookClippings.put(clippingTitle, currentClippings);
         }
-        if(bookClippings.size() < 1){
-            
-        }
+        logger.info("[Message] Total books: {}", bookClippings.size());
+        logger.info("[Message] Total clippings: {}", totalClippings);
         return bookClippings;
     }
     

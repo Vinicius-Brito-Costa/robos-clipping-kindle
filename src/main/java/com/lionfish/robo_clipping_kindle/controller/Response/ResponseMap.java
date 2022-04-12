@@ -11,18 +11,19 @@ public enum ResponseMap {
     ACCEPTED("01", HttpStatus.ACCEPTED, "Request successfully accepted."),
     CREATED("02", HttpStatus.CREATED, "Created successfully."),
     NO_CONTENT("03", HttpStatus.NO_CONTENT, "Request successfull, there's no data to be returned."),
+    CONTINUE("100", HttpStatus.CONTINUE, "Request will be processed."),
     BAD_REQUEST("101", HttpStatus.BAD_REQUEST, "Malformed payload."),
     BAD_GATEWAY("102", HttpStatus.BAD_GATEWAY, "Error while trying to load request.");
 
-    private ResponseData response = new ResponseData();
+    private final ResponseData response = new ResponseData();
 
-    private ResponseMap(String code, HttpStatus status, String defaultMessage){
+    ResponseMap(String code, HttpStatus status, String defaultMessage){
         this.response.setCode(code);
         this.response.setStatus(status);
         this.response.setMessage(defaultMessage);
     }
 
     public void setResponseDataBody(Object body){
-        this.response.setBody(body);;
+        this.response.setBody(body);
     }
 }
