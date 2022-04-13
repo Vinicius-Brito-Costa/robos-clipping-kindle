@@ -4,6 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.JedisPooled;
 
+/**
+ * Holds info for creating/using a singleton connection of Jedis
+ */
 public class RedisConnect {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisConnect.class);
@@ -11,8 +14,10 @@ public class RedisConnect {
     private final JedisPooled redisConnection;
 
     private RedisConnect(){
-        String host = "localhost";
-        int port = 6379;
+        this("localhost", 6379);
+    }
+
+    private RedisConnect(String host, int port){
         this.redisConnection = new JedisPooled(host, port);
         logger.info("[Message] Redis connection instance created. host {{}}, port {{}}", host, port);
     }

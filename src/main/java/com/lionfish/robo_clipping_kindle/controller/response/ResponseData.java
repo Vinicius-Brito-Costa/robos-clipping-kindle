@@ -1,11 +1,11 @@
-package com.lionfish.robo_clipping_kindle.controller.Response;
+package com.lionfish.robo_clipping_kindle.controller.response;
 
 import org.springframework.http.HttpStatus;
 
 import lombok.Getter;
 import lombok.Setter;
 /**
- * Holds all important data to create a Response
+ * Holds all important data to create a uniform Response
  */
 public class ResponseData {
     

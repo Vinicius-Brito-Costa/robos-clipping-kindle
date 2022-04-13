@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/***
+ * Service responsible for the File flow. Create, Delete and Retrieve.
+ */
 public class FileService {
 
     private static final Logger logger = LoggerFactory.getLogger(FileService.class);
@@ -15,6 +18,11 @@ public class FileService {
     
     private FileService(){}
 
+    /***
+     * Create files in the /chunks folder
+     * @param fileName
+     * @param data that will be written in the file
+     */
     public static void createFile(String fileName, Object data){
         try {
             Path chunkDir = Files.createDirectories(PATH);
@@ -26,6 +34,11 @@ public class FileService {
         }
     }
 
+    /***
+     * Returns file from the /chunks folder as a byte[] using its name
+     * @param fileName full name(including the file extension)
+     * @return
+     */
     public static byte[] getFileAsBytes(String fileName){
         byte[] file = null;
         try {
@@ -37,6 +50,10 @@ public class FileService {
         return file;
     }
 
+    /***
+     * Delete a file from the /chunks folder using its name
+     * @param fileName full name(including the file extension)
+     */
     public static void deleteFile(String fileName){
         try {
             Files.delete(PATH.resolve(fileName));

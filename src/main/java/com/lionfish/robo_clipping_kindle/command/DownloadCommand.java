@@ -28,21 +28,22 @@ public class DownloadCommand implements ICommand{
         logger.info("[Message] Clipping template: Default");
         HashMap<String, List<Clipping>> bookClippings = new HashMap<>();
         int totalClippings = 0;
-        for(List<String> clipp : ClippingService.getClippings((String) object)){
-            totalClippings += clipp.size();
-            List<String> cleanedClipping = ClippingService.removeEmptyBlankAndInvalid(clipp);
+        for(List<String> clip : ClippingService.getClippings((String) object)){
+            totalClippings += clip.size();
+            List<String> cleanedClipping = ClippingService.removeEmptyBlankAndInvalid(clip);
             if(ClippingService.removeClipping(cleanedClipping)){
+                logger.debug("[Debug] Clipping removed.");
                 continue;
             }
-            Clipping formatedClipping = template.formatClipping(cleanedClipping);
-            String clippingTitle = formatedClipping.getTitle();
+            Clipping formattedClipping = template.formatClipping(cleanedClipping);
+            String clippingTitle = formattedClipping.getTitle();
             List<Clipping> currentClippings = bookClippings.get(clippingTitle);
             if(currentClippings != null){
-                currentClippings.add(formatedClipping);
+                currentClippings.add(formattedClipping);
                 continue;
             }
             currentClippings = new ArrayList<>();
-            currentClippings.add(formatedClipping);
+            currentClippings.add(formattedClipping);
             bookClippings.put(clippingTitle, currentClippings);
         }
         logger.info("[Message] Total books: {}", bookClippings.size());

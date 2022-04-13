@@ -7,5 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ClippingFile {
     private String token;
-    private String chunk;
+    private String clippings;
 }

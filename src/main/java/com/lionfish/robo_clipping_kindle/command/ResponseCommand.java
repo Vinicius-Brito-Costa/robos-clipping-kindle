@@ -1,6 +1,6 @@
 package com.lionfish.robo_clipping_kindle.command;
 
-import com.lionfish.robo_clipping_kindle.controller.Response.ResponseMap;
+import com.lionfish.robo_clipping_kindle.controller.response.ResponseMap;
 
 import org.springframework.http.ResponseEntity;
 

@@ -1,9 +1,12 @@
-package com.lionfish.robo_clipping_kindle.controller.Response;
+package com.lionfish.robo_clipping_kindle.controller.response;
 
 import org.springframework.http.HttpStatus;
 
 import lombok.Getter;
 
+/***
+ * Contains the default ResponseData {@link ResponseData}
+ */
 @Getter
 public enum ResponseMap {
 

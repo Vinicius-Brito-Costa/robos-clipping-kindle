@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
+/***
+ * Responsible for holding and returning all commands.
+ */
 public enum CommandMapEnum {
     Response("response", "ResponseCommand"),
     Download("download", "DownloadCommand"),
@@ -15,16 +18,23 @@ public enum CommandMapEnum {
     private static HashMap<String, String> commandMap;
     private final static String FQN = "com.lionfish.robo_clipping_kindle.command.";
 
-    CommandMapEnum(String comandName, String comandClass){
-        addCommand(comandName, FQN + comandClass);
+    CommandMapEnum(String commandName, String commandClass){
+        addCommand(commandName, FQN + commandClass);
     }
 
     private static void addCommand(String comandName, String comandClass){
         if(commandMap == null){
             commandMap = new HashMap<>();
         }
+        logger.debug("[Message] {{}} created", comandClass);
         commandMap.put(comandName, comandClass);
     }
+
+    /***
+     * Returns a command based on the provided string
+     * @param command
+     * @return
+     */
     public static ICommand getCommandClass(String command){
         String returnedClass = commandMap.get(command);
         if(returnedClass == null){

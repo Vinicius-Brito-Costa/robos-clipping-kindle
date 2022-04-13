@@ -2,7 +2,7 @@ package com.lionfish.robo_clipping_kindle.controller;
 
 import com.lionfish.robo_clipping_kindle.command.CommandMapEnum;
 import com.lionfish.robo_clipping_kindle.command.ICommand;
-import com.lionfish.robo_clipping_kindle.controller.Response.ResponseMap;
+import com.lionfish.robo_clipping_kindle.controller.response.ResponseMap;
 import com.lionfish.robo_clipping_kindle.database.redis.RedisConnect;
 import com.lionfish.robo_clipping_kindle.domain.File.ClippingFile;
 import com.lionfish.robo_clipping_kindle.service.FileService;
@@ -20,20 +20,11 @@ import java.util.HashMap;
 @RequestMapping("/api/v1")
 public class ClippingController {
 
-    private static final String DEFAULT_FNAME_SEPARATOR = "-";
-    private static final String DEFAULT_FILE_EXT = ".txt";
-    ICommand responseCommand = CommandMapEnum.getCommandClass("response");
-
     private static final Logger logger = LoggerFactory.getLogger(ClippingController.class);
-    
-    /**
-     * Used to separate and format clippings of a file
-     * @return String[] Each String is a clipping
-     */
-    @PostMapping("/get-clippings")
-    public String[] getClippings(){
-        return new String[]{"Olá, mundo!"};
-    }
+    private static final String DEFAULT_FILE_NAME_SEPARATOR = "-";
+    private static final String DEFAULT_FILE_EXT = ".txt";
+    private static final String SELECTOR_ALL = "*";
+    ICommand responseCommand = CommandMapEnum.getCommandClass("response");
 
     /**
      * Export clippings with especified command(eg: Notion, Markdown, Json, etc...)
@@ -48,21 +39,21 @@ public class ClippingController {
         ICommand comm = CommandMapEnum.getCommandClass(command);
         ResponseMap responseMap = ResponseMap.CONTINUE;
         JedisPooled redis = RedisConnect.getRedisConnection();
-        String[] tokenInfo = clippingFile.getToken().split(DEFAULT_FNAME_SEPARATOR);
+        String[] tokenInfo = clippingFile.getToken().split(DEFAULT_FILE_NAME_SEPARATOR);
         int finalIndex = Integer.parseInt(tokenInfo[1]);
         String currentIndex = tokenInfo[2];
-        String currentToken = tokenInfo[0] + DEFAULT_FNAME_SEPARATOR + tokenInfo[2];
+        String currentToken = tokenInfo[0] + DEFAULT_FILE_NAME_SEPARATOR + tokenInfo[2];
         String fName = currentToken + DEFAULT_FILE_EXT;
 
         redis.set(currentToken, currentIndex);
         logger.info("[Redis] Token {{}} created.", currentToken);
-        FileService.createFile(fName, clippingFile.getChunk());
+        FileService.createFile(fName, clippingFile.getClippings());
 
         logger.info("[Message] Processing {{}} clippings", currentToken);
-        if(redis.keys(tokenInfo[0] + DEFAULT_FNAME_SEPARATOR + "*").size() == finalIndex){
+        if(redis.keys(tokenInfo[0] + DEFAULT_FILE_NAME_SEPARATOR + SELECTOR_ALL).size() == finalIndex){
             StringBuilder res = new StringBuilder();
             for(int index = 0; index < finalIndex; index++){
-                String redisToken = tokenInfo[0] + DEFAULT_FNAME_SEPARATOR + index;
+                String redisToken = tokenInfo[0] + DEFAULT_FILE_NAME_SEPARATOR + index;
                 String fileName = redisToken + DEFAULT_FILE_EXT;
                 res.append(new String(FileService.getFileAsBytes(fileName)));
                 redis.del(redisToken);
@@ -78,8 +69,12 @@ public class ClippingController {
                     responseMap = ResponseMap.BAD_REQUEST;
                 }
             }
+            else{
+                responseMap = ResponseMap.BAD_REQUEST;
+                responseMap.setResponseDataBody("Invalid command " + command );
+            }
             for(int index = 0; index < finalIndex; index++){
-                String fileName = tokenInfo[0] + DEFAULT_FNAME_SEPARATOR + index + DEFAULT_FILE_EXT;
+                String fileName = tokenInfo[0] + DEFAULT_FILE_NAME_SEPARATOR + index + DEFAULT_FILE_EXT;
                 FileService.deleteFile(fileName);
             }
         }
