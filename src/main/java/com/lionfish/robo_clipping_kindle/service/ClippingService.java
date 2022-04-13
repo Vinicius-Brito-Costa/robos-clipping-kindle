@@ -13,13 +13,13 @@ import java.util.List;
 public class ClippingService {
 
     private static final Logger logger = LoggerFactory.getLogger(ClippingService.class);
-    public static final String CLIPP_SEPARATOR = "==========";
+    public static final String CLIP_SEPARATOR = "==========";
     public static final String BREAK_ROW = "\n";
 
     private ClippingService(){}
 
     /**
-     * Separate indivual clippings as single String
+     * Separate individual clippings as single String
      * @return String List: List containing clippings
      */
     public static List<List<String>> getClippings(String clippings){
@@ -62,6 +62,6 @@ public class ClippingService {
     }
 
     public static String[] splitClippings(String clippings){
-        return clippings.split(CLIPP_SEPARATOR);
+        return clippings.split(CLIP_SEPARATOR);
     }
 }

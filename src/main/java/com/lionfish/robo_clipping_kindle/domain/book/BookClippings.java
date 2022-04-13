@@ -1,8 +1,8 @@
-package com.lionfish.robo_clipping_kindle.domain.Book;
+package com.lionfish.robo_clipping_kindle.domain.book;
 
 import java.util.List;
 
-import com.lionfish.robo_clipping_kindle.domain.Clipping.Clipping;
+import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
 
 import lombok.Data;
 

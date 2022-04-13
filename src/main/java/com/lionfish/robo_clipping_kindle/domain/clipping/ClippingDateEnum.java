@@ -1,4 +1,4 @@
-package com.lionfish.robo_clipping_kindle.domain.Clipping;
+package com.lionfish.robo_clipping_kindle.domain.clipping;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;

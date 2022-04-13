@@ -4,7 +4,7 @@ import com.lionfish.robo_clipping_kindle.command.CommandMapEnum;
 import com.lionfish.robo_clipping_kindle.command.ICommand;
 import com.lionfish.robo_clipping_kindle.controller.response.ResponseMap;
 import com.lionfish.robo_clipping_kindle.database.redis.RedisConnect;
-import com.lionfish.robo_clipping_kindle.domain.File.ClippingFile;
+import com.lionfish.robo_clipping_kindle.domain.file.ClippingFile;
 import com.lionfish.robo_clipping_kindle.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

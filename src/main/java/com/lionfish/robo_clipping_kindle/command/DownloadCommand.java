@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.lionfish.robo_clipping_kindle.domain.Clipping.Clipping;
-import com.lionfish.robo_clipping_kindle.domain.Template.DefaultClippingTemplate;
-import com.lionfish.robo_clipping_kindle.domain.Template.IClippingTemplate;
+import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
+import com.lionfish.robo_clipping_kindle.domain.template.DefaultClippingTemplate;
+import com.lionfish.robo_clipping_kindle.domain.template.IClippingTemplate;
 import com.lionfish.robo_clipping_kindle.service.ClippingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

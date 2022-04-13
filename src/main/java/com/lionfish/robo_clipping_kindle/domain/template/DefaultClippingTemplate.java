@@ -1,4 +1,4 @@
-package com.lionfish.robo_clipping_kindle.domain.Template;
+package com.lionfish.robo_clipping_kindle.domain.template;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.lionfish.robo_clipping_kindle.domain.Clipping.Clipping;
-import com.lionfish.robo_clipping_kindle.domain.Clipping.ClippingDateEnum;
+import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
+import com.lionfish.robo_clipping_kindle.domain.clipping.ClippingDateEnum;
 
 public class DefaultClippingTemplate implements IClippingTemplate{
 
