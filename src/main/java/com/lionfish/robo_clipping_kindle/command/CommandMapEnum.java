@@ -1,8 +1,5 @@
 package com.lionfish.robo_clipping_kindle.command;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
@@ -14,7 +11,6 @@ public enum CommandMapEnum {
     Download("download", "DownloadCommand"),
     Notion("notion", "NotionCommand");
 
-    private final static Logger logger = LoggerFactory.getLogger(CommandMapEnum.class);
     private static HashMap<String, String> commandMap;
     private final static String FQN = "com.lionfish.robo_clipping_kindle.command.";
 
@@ -26,7 +22,6 @@ public enum CommandMapEnum {
         if(commandMap == null){
             commandMap = new HashMap<>();
         }
-        logger.debug("[Message] {{}} created", comandClass);
         commandMap.put(comandName, comandClass);
     }
 
@@ -42,7 +37,6 @@ public enum CommandMapEnum {
         }
         try {
             ICommand comm = (ICommand) ICommand.class.getClassLoader().loadClass(returnedClass).getDeclaredConstructor().newInstance();
-            logger.info("[Message] Command {{}} loaded.", command);
             return comm;
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
             return null;

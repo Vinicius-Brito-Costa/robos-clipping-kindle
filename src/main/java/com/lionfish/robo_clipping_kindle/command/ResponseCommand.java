@@ -2,6 +2,7 @@ package com.lionfish.robo_clipping_kindle.command;
 
 import com.lionfish.robo_clipping_kindle.controller.response.ResponseMap;
 
+import com.lionfish.robo_clipping_kindle.domain.response.ResponseDAO;
 import org.springframework.http.ResponseEntity;
 
 import lombok.AllArgsConstructor;
@@ -17,12 +18,5 @@ public class ResponseCommand implements ICommand {
             .body(new ResponseDAO(map.getResponse().getCode(), map.getResponse().getBody()));
         map.setResponseDataBody(null);
         return response;
-    }
-    
-    @Data
-    @AllArgsConstructor
-    static class ResponseDAO{
-        private String code;
-        private Object data;
     }
 }

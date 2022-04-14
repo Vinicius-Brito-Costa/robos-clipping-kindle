@@ -8,16 +8,22 @@ import java.util.List;
 
 import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
 import com.lionfish.robo_clipping_kindle.domain.clipping.ClippingDateEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultClippingTemplate implements IClippingTemplate{
+
+    private static final Logger logger = LoggerFactory.getLogger(DefaultClippingTemplate.class);
 
     @Override
     public Clipping formatClipping(List<String> clipping) {
         Clipping createdClipping = new Clipping();
         createdClipping.setTitle(clipping.get(0));
         String[] infoList = clipping.get(1).split(INFO_SEPARATOR);
+
         // Check's if info list contains page information.
         if(infoList.length > 2){
+            logger.info("[Info] Retrieving page information");
             createdClipping.setPage(Integer.parseInt(formatClippingInfo(infoList[0])));
             createdClipping.setPosition(formatClippingInfo(infoList[1]));
         }
@@ -30,8 +36,8 @@ public class DefaultClippingTemplate implements IClippingTemplate{
     }
 
     public static String formatClippingInfo(String raw){
-        String[] separetaredWords = raw.split(SPACE);
-        return separetaredWords[separetaredWords.length - 1];
+        String[] separatedWords = raw.split(SPACE);
+        return separatedWords[separatedWords.length - 1];
     }
     
     /**
@@ -53,9 +59,9 @@ public class DefaultClippingTemplate implements IClippingTemplate{
         Date date = null;
         try {
             date = formatter.parse(formatedDate);
+            logger.info("[Info] Date successfully parsed {{}}", date.toString());
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("[Error] Failed trying to parse date {{}}", rawDate, e);
         }
         return date;
     }
