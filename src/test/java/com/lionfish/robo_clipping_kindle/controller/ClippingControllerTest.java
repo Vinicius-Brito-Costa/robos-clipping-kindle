@@ -1,6 +1,5 @@
 package com.lionfish.robo_clipping_kindle.controller;
 
-import com.lionfish.robo_clipping_kindle.controller.response.ResponseData;
 import com.lionfish.robo_clipping_kindle.domain.file.ClippingFile;
 import com.lionfish.robo_clipping_kindle.domain.response.ResponseDAO;
 import org.junit.jupiter.api.Assertions;
@@ -31,9 +30,9 @@ public class ClippingControllerTest {
             "A Philosophy of Software Design (John Ousterhout)\n" +
             "The comments-first approach has three benefits. First, it produces better comments. If you write the comments as you are designing the class, the key design issues will be fresh in your mind, so it’s easy to record them. It’s better to write the interface comment for each method before its body, so you can focus on the method’s abstraction and interface without being distracted by its implementation.\n" +
             "==========";
-    private String book = "A Philosophy of Software Design (John Ousterhout)";
+
     @Test
-    void controllerIsOK(){
+    void controllerUsageOfDownloadCommandIsOK(){
         ClippingController controller = new ClippingController();
         ClippingFile file = new ClippingFile(clippingToken, clippings);
 
@@ -49,6 +48,7 @@ public class ClippingControllerTest {
         HashMap<String, List<String>> dataMap = (HashMap<String, List<String>>) responseData.getData();
         Assertions.assertNotNull(dataMap);
         Assertions.assertEquals(dataMap.size(), 1);
+        String book = "A Philosophy of Software Design (John Ousterhout)";
         Assertions.assertNotNull(dataMap.get(book));
         Assertions.assertEquals(dataMap.get(book).size(), 3);
     }
