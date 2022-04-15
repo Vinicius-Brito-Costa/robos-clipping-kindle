@@ -1,14 +1,17 @@
 package com.lionfish.robo_clipping_kindle.controller;
 
+import com.lionfish.robo_clipping_kindle.TestRedisConfiguration;
 import com.lionfish.robo_clipping_kindle.domain.file.ClippingFile;
 import com.lionfish.robo_clipping_kindle.domain.response.ResponseDAO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
 import java.util.List;
 
+@SpringBootTest(classes = TestRedisConfiguration.class)
 public class ClippingControllerTest {
 
     String clippingToken = "biruleibe-1-0";
