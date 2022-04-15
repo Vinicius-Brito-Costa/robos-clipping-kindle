@@ -3,6 +3,7 @@ package com.lionfish.robo_clipping_kindle.service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ClippingServiceTest {
@@ -37,5 +38,21 @@ public class ClippingServiceTest {
         clippings.forEach(clips -> {
             Assertions.assertEquals(3, ClippingService.removeEmptyBlankAndInvalid(clips).size());
         });
+    }
+
+    @Test
+    void shouldRemoveClippingIsOK() {
+        List<String> invalidList = Arrays.asList("Ola", "Mundo");
+        List<String> validList = Arrays.asList("Ola", "Mundo", "!");
+
+        Assertions.assertTrue(ClippingService.removeClipping(invalidList));
+        Assertions.assertFalse(ClippingService.removeClipping(validList));
+    }
+
+    @Test
+    void isRemovingEmptyAndBlank(){
+        List<String> unclean = Arrays.asList("Ola", "Mundo", "!", "", "    ", "\n");
+        List<String> clean = ClippingService.removeEmptyBlankAndInvalid(unclean);
+        Assertions.assertEquals(3, clean.size());
     }
 }

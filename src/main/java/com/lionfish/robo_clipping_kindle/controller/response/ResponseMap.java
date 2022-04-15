@@ -18,15 +18,16 @@ public enum ResponseMap {
     BAD_REQUEST("101", HttpStatus.BAD_REQUEST, "Malformed payload."),
     BAD_GATEWAY("102", HttpStatus.BAD_GATEWAY, "Error while trying to load request.");
 
-    private final ResponseData response = new ResponseData();
+    @Getter
+    private final String code;
+    @Getter
+    private final HttpStatus status;
+    @Getter
+    private final String message;
 
     ResponseMap(String code, HttpStatus status, String defaultMessage){
-        this.response.setCode(code);
-        this.response.setStatus(status);
-        this.response.setMessage(defaultMessage);
-    }
-
-    public void setResponseDataBody(Object body){
-        this.response.setBody(body);
+        this.code = code;
+        this.status = status;
+        this.message = defaultMessage;
     }
 }

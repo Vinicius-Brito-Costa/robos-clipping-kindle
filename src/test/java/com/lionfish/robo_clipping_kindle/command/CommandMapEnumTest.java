@@ -12,4 +12,10 @@ public class CommandMapEnumTest {
         DownloadCommand castedCommand = (DownloadCommand) command;
         Assertions.assertNotNull(castedCommand);
     }
+
+    @Test
+    void getCommandIsNotOK(){
+        ICommand command = CommandMapEnum.getCommandClass("invalidCommand");
+        Assertions.assertNull(command);
+    }
 }

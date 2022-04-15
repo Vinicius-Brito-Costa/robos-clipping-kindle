@@ -1,5 +1,6 @@
 package com.lionfish.robo_clipping_kindle.command;
 
+import com.lionfish.robo_clipping_kindle.controller.response.ResponseData;
 import com.lionfish.robo_clipping_kindle.controller.response.ResponseMap;
 
 import com.lionfish.robo_clipping_kindle.domain.response.ResponseDAO;
@@ -12,11 +13,9 @@ public class ResponseCommand implements ICommand {
 
     @Override
     public ResponseEntity<Object> execute(Object object) {
-        ResponseMap map = (ResponseMap) object;
-        ResponseEntity<Object> response =  ResponseEntity
-            .status(map.getResponse().getStatus())
-            .body(new ResponseDAO(map.getResponse().getCode(), map.getResponse().getBody()));
-        map.setResponseDataBody(null);
-        return response;
+        ResponseData resData = (ResponseData) object;
+        return ResponseEntity
+            .status(resData.getStatus())
+            .body(new ResponseDAO(resData.getCode(), resData.getBody()));
     }
 }

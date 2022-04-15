@@ -29,7 +29,6 @@ public class DownloadCommand implements ICommand{
         HashMap<String, List<Clipping>> bookClippings = new HashMap<>();
         int totalClippings = 0;
         for(List<String> clip : ClippingService.getClippings((String) object)){
-            totalClippings += clip.size();
             List<String> cleanedClipping = ClippingService.removeEmptyBlankAndInvalid(clip);
             if(ClippingService.removeClipping(cleanedClipping)){
                 logger.debug("[Debug] Clipping removed.");
@@ -45,6 +44,7 @@ public class DownloadCommand implements ICommand{
             currentClippings = new ArrayList<>();
             currentClippings.add(formattedClipping);
             bookClippings.put(clippingTitle, currentClippings);
+            totalClippings += clip.size();
         }
         logger.info("[Message] Total books: {}", bookClippings.size());
         logger.info("[Message] Total clippings: {}", totalClippings);

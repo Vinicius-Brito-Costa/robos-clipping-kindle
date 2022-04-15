@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>com.lionfish</groupId>
 	<artifactId>robo_clipping_kindle</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<name>robo_clipping_kindle</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>

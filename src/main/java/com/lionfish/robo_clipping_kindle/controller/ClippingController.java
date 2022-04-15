@@ -2,6 +2,7 @@ package com.lionfish.robo_clipping_kindle.controller;
 
 import com.lionfish.robo_clipping_kindle.command.CommandMapEnum;
 import com.lionfish.robo_clipping_kindle.command.ICommand;
+import com.lionfish.robo_clipping_kindle.controller.response.ResponseData;
 import com.lionfish.robo_clipping_kindle.controller.response.ResponseMap;
 import com.lionfish.robo_clipping_kindle.database.redis.RedisConnect;
 import com.lionfish.robo_clipping_kindle.domain.file.ClippingFile;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.JedisPooled;
 
 import javax.websocket.server.PathParam;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 
@@ -37,7 +39,7 @@ public class ClippingController {
     public Object exportClippingsMulti(@PathParam(value = "command") String command, @RequestBody ClippingFile clippingFile){
         logger.info("[Message] Export process initiated...");
         ICommand comm = CommandMapEnum.getCommandClass(command);
-        ResponseMap responseMap = ResponseMap.CONTINUE;
+        ResponseData responseData = new ResponseData(ResponseMap.CONTINUE);
         JedisPooled redis = RedisConnect.getRedisConnection();
         String[] tokenInfo = clippingFile.getToken().split(DEFAULT_FILE_NAME_SEPARATOR);
         int finalIndex = Integer.parseInt(tokenInfo[1]);
@@ -47,7 +49,7 @@ public class ClippingController {
 
         redis.set(currentToken, currentIndex);
         logger.info("[Redis] Token {{}} created.", currentToken);
-        FileService.createFile(fName, clippingFile.getClippings());
+        FileService.createFile(fName, clippingFile.getClippings().getBytes(StandardCharsets.UTF_8));
 
         logger.info("[Message] Processing {{}} clippings", currentToken);
         if(redis.keys(tokenInfo[0] + DEFAULT_FILE_NAME_SEPARATOR + SELECTOR_ALL).size() == finalIndex){
@@ -62,22 +64,22 @@ public class ClippingController {
             if(comm != null){
                 HashMap<Object, Object> commandResponse = (HashMap<Object, Object>) comm.execute(res.toString());
                 if(commandResponse != null && commandResponse.size() > 0){
-                    responseMap = ResponseMap.OK;
-                    responseMap.setResponseDataBody(commandResponse);
+                    responseData = new ResponseData(ResponseMap.OK);
+                    responseData.setBody(commandResponse);
                 }
                 else{
-                    responseMap = ResponseMap.BAD_REQUEST;
+                    responseData = new ResponseData(ResponseMap.BAD_REQUEST);
                 }
             }
             else{
-                responseMap = ResponseMap.BAD_REQUEST;
-                responseMap.setResponseDataBody("Invalid command " + command );
+                responseData = new ResponseData(ResponseMap.BAD_REQUEST);
+                responseData.setBody("Invalid command " + command );
             }
             for(int index = 0; index < finalIndex; index++){
                 String fileName = tokenInfo[0] + DEFAULT_FILE_NAME_SEPARATOR + index + DEFAULT_FILE_EXT;
                 FileService.deleteFile(fileName);
             }
         }
-        return responseCommand.execute(responseMap);
+        return responseCommand.execute(responseData);
     }
 }

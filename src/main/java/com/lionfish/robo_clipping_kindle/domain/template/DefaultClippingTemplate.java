@@ -27,7 +27,7 @@ public class DefaultClippingTemplate implements IClippingTemplate{
             createdClipping.setPage(Integer.parseInt(formatClippingInfo(infoList[0])));
             createdClipping.setPosition(formatClippingInfo(infoList[1]));
         }
-        else{
+        else if (infoList.length > 1){
             createdClipping.setPosition(formatClippingInfo(infoList[0]));
         }
         createdClipping.setDate(formatClippingDate(infoList[infoList.length - 1]));

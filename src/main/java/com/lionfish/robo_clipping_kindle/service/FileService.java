@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -20,23 +19,23 @@ public class FileService {
 
     /***
      * Create files in the /chunks folder
-     * @param fileName
+     * @param fileName full name(including the file extension if needed)
      * @param data that will be written in the file
      */
-    public static void createFile(String fileName, Object data){
+    public static void createFile(String fileName, byte[] data){
         try {
             Path chunkDir = Files.createDirectories(PATH);
             Path tempFile = Files.createFile(chunkDir.resolve(fileName));
-            Files.writeString(tempFile, (String) data);
+            Files.write(tempFile, data);
             logger.info("[Message] File {{}} created at path {{}}.", fileName, tempFile);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("[Error] Something went wrong trying to create file {{}}", fileName, e);
         }
     }
 
     /***
      * Returns file from the /chunks folder as a byte[] using its name
-     * @param fileName full name(including the file extension)
+     * @param fileName full name(including the file extension if needed)
      * @return
      */
     public static byte[] getFileAsBytes(String fileName){
@@ -44,7 +43,7 @@ public class FileService {
         try {
             file = Files.readAllBytes(PATH.resolve(fileName));
             logger.info("[Message] Successfuly retrieved file {{}} as byte[]", fileName);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("[Error] Something went wrong trying to retrieve file {{}} as byte[]", fileName, e);
         }
         return file;
@@ -52,13 +51,13 @@ public class FileService {
 
     /***
      * Delete a file from the /chunks folder using its name
-     * @param fileName full name(including the file extension)
+     * @param fileName full name(including the file extension if needed)
      */
     public static void deleteFile(String fileName){
         try {
             Files.delete(PATH.resolve(fileName));
             logger.info("[Message] Successfuly deleted file {{}}", fileName);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("[Error] Something went wrong trying to delete file {{}}", fileName, e);
         }
     }
