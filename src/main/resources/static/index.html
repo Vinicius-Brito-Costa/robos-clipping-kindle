@@ -26,15 +26,16 @@
                             },
                             body: JSON.stringify({
                                 token: fileName,
-                                clippingFile: res.target.result
+                                clippings: res.target.result
                             })
                         }
                         return fetch("http://localhost:8080/robo/api/v1/exportMulti?command=download", options)
                         .then(res => {
                             if(res.ok){
-                                return res.json()
+                                return res.text()
                             }
                             console.log("Errou!!!")
+                            console.log(res);
                         })
                         .then(res => console.log(res));
                     }

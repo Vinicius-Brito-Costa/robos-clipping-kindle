@@ -23,7 +23,7 @@ public class DefaultClippingTemplate implements IClippingTemplate{
 
         // Check's if info list contains page information.
         if(infoList.length > 2){
-            logger.info("[Info] Retrieving page information");
+            logger.debug("[Debug] Retrieving page information");
             createdClipping.setPage(Integer.parseInt(formatClippingInfo(infoList[0])));
             createdClipping.setPosition(formatClippingInfo(infoList[1]));
         }
@@ -59,7 +59,7 @@ public class DefaultClippingTemplate implements IClippingTemplate{
         Date date = null;
         try {
             date = formatter.parse(formatedDate);
-            logger.info("[Info] Date successfully parsed {{}}", date.toString());
+            logger.debug("[Debug] Date successfully parsed {{}}", date.toString());
         } catch (ParseException e) {
             logger.error("[Error] Failed trying to parse date {{}}", rawDate, e);
         }
