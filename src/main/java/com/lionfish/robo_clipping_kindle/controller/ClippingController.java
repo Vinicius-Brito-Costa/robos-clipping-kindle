@@ -9,6 +9,7 @@ import com.lionfish.robo_clipping_kindle.domain.request.ExportRequestDTO;
 import com.lionfish.robo_clipping_kindle.domain.response.ExportResponseDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.JedisPooled;
 
@@ -17,7 +18,9 @@ import javax.websocket.server.PathParam;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/v1")
+@RequestMapping(value = "/api/v1",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
 public class ClippingController {
 
     private static final Logger logger = LoggerFactory.getLogger(ClippingController.class);

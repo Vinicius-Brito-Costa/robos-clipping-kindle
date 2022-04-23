@@ -40,12 +40,13 @@ public class DownloadCommand implements ICommand{
             List<Clipping> currentClippings = bookClippings.get(clippingTitle);
             if(currentClippings != null){
                 currentClippings.add(formattedClipping);
+                totalClippings++;
                 continue;
             }
             currentClippings = new ArrayList<>();
             currentClippings.add(formattedClipping);
             bookClippings.put(clippingTitle, currentClippings);
-            totalClippings += clip.size();
+            totalClippings++;
         }
         logger.info("[Message] Total books: {}", bookClippings.size());
         logger.info("[Message] Total clippings: {}", totalClippings);
