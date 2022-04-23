@@ -1,8 +1,8 @@
 package com.lionfish.robo_clipping_kindle.controller;
 
 import com.lionfish.robo_clipping_kindle.TestRedisConfiguration;
-import com.lionfish.robo_clipping_kindle.domain.file.ClippingFile;
-import com.lionfish.robo_clipping_kindle.domain.response.ResponseDAO;
+import com.lionfish.robo_clipping_kindle.domain.request.ExportRequestDTO;
+import com.lionfish.robo_clipping_kindle.domain.response.ResponseDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @SpringBootTest(classes = TestRedisConfiguration.class)
-public class ClippingControllerTest {
+class ClippingControllerTest {
 
     String clippingToken = "biruleibe-1-0";
     String clippings = "A Philosophy of Software Design (John Ousterhout)\n" +
@@ -35,24 +35,25 @@ public class ClippingControllerTest {
             "==========";
 
     @Test
+    @SuppressWarnings("unchecked")
     void controllerUsageOfDownloadCommandIsOK(){
         ClippingController controller = new ClippingController();
-        ClippingFile file = new ClippingFile(clippingToken, clippings);
+        ExportRequestDTO file = new ExportRequestDTO(clippingToken, clippings);
 
-        Object responseObj = controller.exportClippingsMulti("download", file);
+        Object responseObj = controller.export("download", file);
         Assertions.assertNotNull(responseObj);
 
         ResponseEntity<Object> response = (ResponseEntity<Object>) responseObj;
         Assertions.assertNotNull(response);
 
-        ResponseDAO responseData = (ResponseDAO) response.getBody();
+        ResponseDTO responseData = (ResponseDTO) response.getBody();
         Assertions.assertNotNull(responseData);
 
         HashMap<String, List<String>> dataMap = (HashMap<String, List<String>>) responseData.getData();
         Assertions.assertNotNull(dataMap);
-        Assertions.assertEquals(dataMap.size(), 1);
+        Assertions.assertEquals(1, dataMap.size());
         String book = "A Philosophy of Software Design (John Ousterhout)";
         Assertions.assertNotNull(dataMap.get(book));
-        Assertions.assertEquals(dataMap.get(book).size(), 3);
+        Assertions.assertEquals(3, dataMap.get(book).size());
     }
 }

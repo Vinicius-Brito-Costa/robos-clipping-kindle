@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
+import com.lionfish.robo_clipping_kindle.domain.response.ExportResponseDTO;
 import com.lionfish.robo_clipping_kindle.domain.template.DefaultClippingTemplate;
 import com.lionfish.robo_clipping_kindle.domain.template.IClippingTemplate;
 import com.lionfish.robo_clipping_kindle.service.ClippingService;
@@ -23,7 +24,7 @@ public class DownloadCommand implements ICommand{
     private static final Logger logger = LoggerFactory.getLogger(DownloadCommand.class);
 
     @Override
-    public HashMap<String, List<Clipping>> execute(Object object) {
+    public Object execute(Object object) {
         IClippingTemplate template = new DefaultClippingTemplate();
         logger.info("[Message] Clipping template: Default");
         HashMap<String, List<Clipping>> bookClippings = new HashMap<>();
@@ -48,7 +49,7 @@ public class DownloadCommand implements ICommand{
         }
         logger.info("[Message] Total books: {}", bookClippings.size());
         logger.info("[Message] Total clippings: {}", totalClippings);
-        return bookClippings;
+        return new ExportResponseDTO(bookClippings.size(), totalClippings, bookClippings);
     }
     
 }

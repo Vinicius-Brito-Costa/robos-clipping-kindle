@@ -1,13 +1,13 @@
 package com.lionfish.robo_clipping_kindle.command;
 
-import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
+import com.lionfish.robo_clipping_kindle.domain.response.ExportResponseDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class DownloadCommandTest {
+class DownloadCommandTest {
 
     private String okPayload = "A Philosophy of Software Design (John Ousterhout)\n" +
             "- Seu destaque na página 179 | posição 2739-2747 | Adicionado: sábado, 19 de março de 2022 09:39:58\n" +
@@ -30,10 +30,11 @@ public class DownloadCommandTest {
     private String okPayloadBook = "A Philosophy of Software Design (John Ousterhout)";
 
     @Test
+    @SuppressWarnings("unchecked")
     void downloadCommandIsOK(){
         DownloadCommand downloadCommand = new DownloadCommand();
-        HashMap<String, List<Clipping>> result = downloadCommand.execute(okPayload);
-        Assertions.assertEquals(result.size(), 1);
-        Assertions.assertEquals(result.get(okPayloadBook).size(), 3);
+        ExportResponseDTO result = (ExportResponseDTO) downloadCommand.execute(okPayload);
+        Assertions.assertEquals(1, result.getBookCount());
+        Assertions.assertEquals(3, ((HashMap<String, List<String>>) result.getResult()).get(okPayloadBook).size());
     }
 }

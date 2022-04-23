@@ -7,7 +7,7 @@ import lombok.Generated;
 @Data
 @AllArgsConstructor
 @Generated
-public class ResponseDAO{
+public class ResponseDTO {
     private String code;
     private Object data;
 }

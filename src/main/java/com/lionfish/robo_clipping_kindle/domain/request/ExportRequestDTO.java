@@ -1,4 +1,4 @@
-package com.lionfish.robo_clipping_kindle.domain.file;
+package com.lionfish.robo_clipping_kindle.domain.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Generated
-public class ClippingFile {
+public class ExportRequestDTO {
     private String token;
     private String clippings;
 }

@@ -1,13 +1,9 @@
 package com.lionfish.robo_clipping_kindle.command;
 
 import com.lionfish.robo_clipping_kindle.controller.response.ResponseData;
-import com.lionfish.robo_clipping_kindle.controller.response.ResponseMap;
 
-import com.lionfish.robo_clipping_kindle.domain.response.ResponseDAO;
+import com.lionfish.robo_clipping_kindle.domain.response.ResponseDTO;
 import org.springframework.http.ResponseEntity;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 public class ResponseCommand implements ICommand {
 
@@ -16,6 +12,6 @@ public class ResponseCommand implements ICommand {
         ResponseData resData = (ResponseData) object;
         return ResponseEntity
             .status(resData.getStatus())
-            .body(new ResponseDAO(resData.getCode(), resData.getBody()));
+            .body(new ResponseDTO(resData.getCode(), resData.getBody()));
     }
 }

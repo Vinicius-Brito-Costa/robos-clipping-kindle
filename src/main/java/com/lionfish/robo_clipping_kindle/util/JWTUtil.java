@@ -1,19 +1,23 @@
 package com.lionfish.robo_clipping_kindle.util;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.HashMap;
 
 public class JWTUtil {
 
+    private static final Logger logger = LoggerFactory.getLogger(JWTUtil.class);
     private static final String JWT_PASSWORD = "hidden-secret-password-123";
     private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
     private static final String ISSUER = "authenticator";
     private static final long MILLI_MULTIPLIER = 1000;
+
+    private JWTUtil(){}
 
     public static String generateJWT(String user, String subject, long expTimeInSeconds){
         long now = System.currentTimeMillis();
@@ -39,13 +43,13 @@ public class JWTUtil {
 
     public static boolean validateToken(String token){
         try{
-            Claims claims = Jwts.parser().setSigningKey(JWT_PASSWORD).parseClaimsJws(token).getBody();
-            System.out.println(claims);
-            return true;
+            Jwts.parser().setSigningKey(JWT_PASSWORD).parseClaimsJws(token.replace("Bearer ", "")).getBody();
         }
         catch (Exception e){
-            System.out.println(e);
+            logger.error("[ Error ] Token is invalid", e);
             return false;
         }
+        logger.info("[ Message ] Token is valid");
+        return true;
     }
 }
