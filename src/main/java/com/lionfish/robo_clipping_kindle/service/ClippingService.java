@@ -30,6 +30,13 @@ public class ClippingService {
     private ClippingService(){}
 
 
+    /***
+     * Build the ResponseData
+     * @param type of the command.
+     * @param command the command itself
+     * @param request returned by the user
+     * @return ResponseData
+     */
     public static ResponseData buildResponseMessage(CommandType type, String command, ExportRequestDTO request){
         ResponseData responseData;
         logger.info("[ Message ] Command: {{}}, CommandType: {{}}", command, type);
