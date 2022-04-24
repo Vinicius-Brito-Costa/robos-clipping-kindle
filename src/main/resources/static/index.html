@@ -7,41 +7,56 @@
     <title>Document</title>
 </head>
 <body>
+    <button onclick="activateCommand('download')">DOWNLOAD-COMMAND</button>
+    <button onclick="activateCommand('download-docx')">DOCX-COMMAND</button>
     <div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event)" style="background-color: blueviolet; color: white; height: 200px">
         <p>Drag your 'My Clippings.txt' file here.</p>
     </div>
     <script>
-        async function uploadParts(slices){
-            let stop = false;
-            return await slices.forEach(async (slice, index) => {
-                let fileName = "biruleibe-" + slices.length + "-" + index
-                console.log(fileName)
-                fr = new FileReader();
-                fr.onload = res => {
-                    if(!stop){
-                        let options = {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json;charset=utf-8"
-                            },
-                            body: JSON.stringify({
-                                token: fileName,
-                                clippings: res.target.result
-                            })
-                        }
-                        return fetch("http://localhost:8080/robo/api/v1/exportMulti?command=download", options)
-                        .then(res => {
-                            if(res.ok){
-                                return res.text()
-                            }
-                            console.log("Errou!!!")
-                            console.log(res);
-                        })
-                        .then(res => console.log(res));
+        let command = "";
+        function activateCommand(comm){
+            command = comm;
+            console.log(command);
+        }
+        async function upload(file){
+            let fileName = "biruleibe-" + file.length + "-test"
+            console.log(fileName)
+            fr = new FileReader();
+            fr.onload = res => {
+                let options = {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json;charset=utf-8"
+                    },
+                    body: JSON.stringify({
+                        token: fileName,
+                        clippings: res.target.result
+                    })
+                }
+                console.log(options)
+                fetch("http://localhost:8080/robo/api/v1/export?command=" + command, options)
+                .then(res => {
+                    if(res.ok){
+                        return res.json()
                     }
-                };
-                return await fr.readAsText(slice);
-            })
+                    console.log("Errou!!!")
+                    console.log(res);
+                })
+                .then(res => {
+                    if(command == "download"){
+                        let books = {};
+                        res.data.result.forEach(book => {
+                            books[book.title] = book.clippings
+                        })
+
+                        download(new Blob([JSON.stringify(books)], {type: "application/json"}), "json");
+                    }
+                    else if(command == "download-docx"){
+                        download(new Blob([res.data.result], {type: "text/plain"}), "docx");
+                    }
+                });
+            };
+            fr.readAsText(file)
         }
 
         async function dropHandler(event){
@@ -51,8 +66,7 @@
                 if (event.dataTransfer.items[0].kind === 'file') {
                     
                     var file = event.dataTransfer.items[0].getAsFile();
-                    let multiPart = [file]//sliceFile(file, Math.round(file.size / 1000000))
-                    await uploadParts(multiPart)
+                    await upload(file)
                 }
               }
               return true;
@@ -60,27 +74,12 @@
         function dragOverHandler(ev) {
             ev.preventDefault();
         }
-
-        function readerHandler(event){
-            let result = event.currentTarget.result;
-            download(result);
-        }
-
-        /**
-        * @param {File|Blob} - file to slice
-        * @param {Number} - chunksAmount
-        * @return {Array} - an array of Blobs
-        **/
-        function sliceFile(file, chunksAmount) {
-            var byteIndex = 0;
-            var chunks = [];
-            
-            for (var i = 0; i < chunksAmount; i += 1) {
-                var byteEnd = Math.ceil((file.size / chunksAmount) * (i + 1));
-                chunks.push(file.slice(byteIndex, byteEnd, "text/plain"));
-                byteIndex += (byteEnd - byteIndex);
-            }
-            return chunks.length < 1 ? [file] : chunks;
+        function download(blob, extension){
+            let link = document.createElement("a")
+            link.href = window.URL.createObjectURL(blob);
+            link.target = "_blank";
+            link.download = "My Clippings." + extension;
+            link.click();
         }
     </script>
 </body>
