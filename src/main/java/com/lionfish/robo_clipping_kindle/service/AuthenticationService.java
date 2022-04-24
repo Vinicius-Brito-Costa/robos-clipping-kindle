@@ -3,6 +3,7 @@ package com.lionfish.robo_clipping_kindle.service;
 import com.lionfish.robo_clipping_kindle.domain.request.GetTokenRequestDTO;
 import com.lionfish.robo_clipping_kindle.domain.request.ValidateTokenRequestDTO;
 import com.lionfish.robo_clipping_kindle.domain.response.ValidateTokenResponseDTO;
+import com.lionfish.robo_clipping_kindle.util.EnvironmentUtil;
 import com.lionfish.robo_clipping_kindle.util.JWTUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,14 +12,21 @@ public class AuthenticationService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
     private static final int DEFAULT_TOKEN_EXPIRATION_TIME_IN_SECONDS = 30;
-    private static final String APPLICATION_LOGIN = "user";
-    private static final String APPLICATION_PASSWORD = "password";
+    private static final String APPLICATION_LOGIN = "ROBO_CLIPPING_USER";
+    private static final String APPLICATION_PASSWORD = "ROBO_CLIPPING_PASSWORD";
 
     private AuthenticationService(){}
 
     public static boolean validCredentials(String user, String password){
+
         // TODO: Replace with correct credential validation
-        return APPLICATION_LOGIN.equals(user) && APPLICATION_PASSWORD.equals(password);
+        String envUser = EnvironmentUtil.getEnvVariable(APPLICATION_LOGIN);
+        String envPassword = EnvironmentUtil.getEnvVariable(APPLICATION_PASSWORD);
+        if(envUser == null || envPassword == null){
+            return false;
+        }
+
+        return envUser.equals(user) && envPassword.equals(password);
     }
 
     public static String getToken(GetTokenRequestDTO tokenRequest){
