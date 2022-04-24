@@ -1,6 +1,7 @@
 package com.lionfish.robo_clipping_kindle.controller;
 
 import com.lionfish.robo_clipping_kindle.TestRedisConfiguration;
+import com.lionfish.robo_clipping_kindle.domain.book.BookClippings;
 import com.lionfish.robo_clipping_kindle.domain.request.ExportRequestDTO;
 import com.lionfish.robo_clipping_kindle.domain.response.ExportResponseDTO;
 import com.lionfish.robo_clipping_kindle.domain.response.ResponseDTO;
@@ -53,7 +54,7 @@ class ClippingControllerTest {
         ExportResponseDTO exportResponseDTO = (ExportResponseDTO) responseData.getData();
         Assertions.assertNotNull(exportResponseDTO);
 
-        HashMap<String, List<String>> dataMap = (HashMap<String, List<String>>) exportResponseDTO.getResult();
+        List<BookClippings> dataMap = (List<BookClippings>) exportResponseDTO.getResult();
         Assertions.assertNotNull(dataMap);
 
     }
