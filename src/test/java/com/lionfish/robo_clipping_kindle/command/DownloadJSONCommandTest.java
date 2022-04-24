@@ -5,10 +5,9 @@ import com.lionfish.robo_clipping_kindle.domain.response.ExportResponseDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.List;
 
-class DownloadCommandTest {
+class DownloadJSONCommandTest {
 
     private String okPayload = "A Philosophy of Software Design (John Ousterhout)\n" +
             "- Seu destaque na página 179 | posição 2739-2747 | Adicionado: sábado, 19 de março de 2022 09:39:58\n" +
@@ -33,8 +32,8 @@ class DownloadCommandTest {
     @Test
     @SuppressWarnings("unchecked")
     void downloadCommandIsOK(){
-        DownloadCommand downloadCommand = new DownloadCommand();
-        ExportResponseDTO result = (ExportResponseDTO) downloadCommand.execute(okPayload);
+        DownloadJSONCommand downloadJSONCommand = new DownloadJSONCommand();
+        ExportResponseDTO result = downloadJSONCommand.execute(okPayload);
         Assertions.assertEquals(1, result.getBookCount());
         Assertions.assertEquals(3, ((List<BookClippings>) result.getResult()).get(0).getClippingCount());
     }

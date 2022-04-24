@@ -38,11 +38,11 @@ class ClippingControllerTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    void controllerUsageOfDownloadCommandIsOK(){
+    void controllerUsageOfDownloadJSONCommandIsOK(){
         ClippingController controller = new ClippingController();
         ExportRequestDTO file = new ExportRequestDTO(clippingToken, clippings);
 
-        Object responseObj = controller.export("download", file);
+        Object responseObj = controller.export("download-json", file);
         Assertions.assertNotNull(responseObj);
 
         ResponseEntity<ResponseDTO> response = (ResponseEntity<ResponseDTO>) responseObj;

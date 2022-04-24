@@ -5,8 +5,11 @@ import com.lionfish.robo_clipping_kindle.command.ICommand;
 import com.lionfish.robo_clipping_kindle.controller.response.ResponseData;
 import com.lionfish.robo_clipping_kindle.controller.response.ResponseMap;
 import com.lionfish.robo_clipping_kindle.database.redis.RedisConnect;
+import com.lionfish.robo_clipping_kindle.domain.command.Command;
+import com.lionfish.robo_clipping_kindle.domain.command.CommandType;
 import com.lionfish.robo_clipping_kindle.domain.request.ExportRequestDTO;
 import com.lionfish.robo_clipping_kindle.domain.response.ExportResponseDTO;
+import com.lionfish.robo_clipping_kindle.validator.CommandValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -26,7 +29,7 @@ public class ClippingController {
     private static final Logger logger = LoggerFactory.getLogger(ClippingController.class);
     private static final String DEFAULT_FILE_NAME_SEPARATOR = "-";
 
-    ICommand responseCommand = CommandMapEnum.getCommandClass("response");
+    ICommand responseCommand = CommandMapEnum.getCommandClass("response").getCommandClass();
 
     /**
      * Export clippings with especified command(eg: Notion, Markdown, Json, etc...)
@@ -37,10 +40,10 @@ public class ClippingController {
     @PostMapping("/export")
     public Object export(@PathParam(value = "command") String command, @RequestBody ExportRequestDTO exportRequestDTO){
         logger.info("[Message] Export process initiated...");
-        ICommand comm = CommandMapEnum.getCommandClass(command);
+        Command comm = CommandMapEnum.getCommandClass(command);
         ResponseData responseData;
-
-        if(comm != null){
+        CommandValidator commandValidator = new CommandValidator(comm, CommandType.REQUEST);
+        if(commandValidator.validate()){
             JedisPooled redis = RedisConnect.getRedisConnection();
             String[] tokenInfo = exportRequestDTO.getToken().split(DEFAULT_FILE_NAME_SEPARATOR);
             String currentIndex = tokenInfo[2];
@@ -51,7 +54,7 @@ public class ClippingController {
 
             logger.info("[Message] Processing {{}} clippings", currentToken);
 
-            ExportResponseDTO commandResponse = (ExportResponseDTO) comm.execute(exportRequestDTO.getClippings());
+            ExportResponseDTO commandResponse = (ExportResponseDTO) comm.getCommandClass().execute(exportRequestDTO.getClippings());
             if(commandResponse != null && commandResponse.getResult() != null
                     && commandResponse.getClippingCount() > 0
                     && commandResponse.getBookCount() > 0){

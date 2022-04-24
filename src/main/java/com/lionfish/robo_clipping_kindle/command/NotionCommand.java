@@ -6,7 +6,7 @@ package com.lionfish.robo_clipping_kindle.command;
 public class NotionCommand implements ICommand{
 
     @Override
-    public String execute(Object object) {
+    public Object execute(Object object) {
          return null;
     }
     

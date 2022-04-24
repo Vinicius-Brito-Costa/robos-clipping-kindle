@@ -13,8 +13,9 @@ class ResponseCommandTest {
     void responseCommandIsOK(){
         ResponseCommand responseCommand = new ResponseCommand();
         ResponseData responseData = new ResponseData(ResponseMap.OK);
-        ResponseEntity<Object> response = responseCommand.execute(responseData);
-        ResponseDTO responseDTO = (ResponseDTO) response.getBody();
+        ResponseEntity<ResponseDTO> response = responseCommand.execute(responseData);
+        Assertions.assertNotNull(response);
+        ResponseDTO responseDTO = response.getBody();
         Assertions.assertNotNull(responseDTO);
         Assertions.assertEquals(responseDTO.getCode(), responseData.getCode());
         Assertions.assertEquals(responseDTO.getData(), responseData.getBody());

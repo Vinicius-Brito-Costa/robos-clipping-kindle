@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 public class ResponseCommand implements ICommand {
 
     @Override
-    public ResponseEntity<Object> execute(Object object) {
+    public ResponseEntity<ResponseDTO> execute(Object object) {
         ResponseData resData = (ResponseData) object;
         return ResponseEntity
             .status(resData.getStatus())

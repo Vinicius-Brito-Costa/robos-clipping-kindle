@@ -23,7 +23,7 @@ public class DownloadDocxCommand implements ICommand{
     private static final String FONT_FAMILY = "font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif";
 
     @Override
-    public Object execute(Object object) {
+    public ExportResponseDTO execute(Object object) {
         Books books = ClippingService.getBooksWithClippings((String) object);
         StringBuilder htmlBooks = new StringBuilder();
         for (BookClippings bookClippings : books.getBookClippings()){
