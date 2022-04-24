@@ -11,19 +11,19 @@ class CommandValidatorTest {
 
     @Test
     void validCommand(){
-        CommandValidator commandValidator = new CommandValidator(CommandMapEnum.getCommandClass("response"), CommandType.INTERNAL);
+        CommandValidator commandValidator = new CommandValidator(CommandMapEnum.getCommandClass("internal-response"), CommandType.INTERNAL);
         Assertions.assertTrue(commandValidator.validate());
     }
 
     @Test
     void invalidCommand(){
-        CommandValidator nullCommand = new CommandValidator(new Command(null, CommandType.REQUEST), CommandType.INTERNAL);
+        CommandValidator nullCommand = new CommandValidator(new Command(null, CommandType.EXPORT), CommandType.INTERNAL);
         Assertions.assertFalse(nullCommand.validate());
 
         CommandValidator nullType = new CommandValidator(new Command(new DownloadJSONCommand(), null), CommandType.INTERNAL);
         Assertions.assertFalse(nullType.validate());
 
-        CommandValidator invalidType = new CommandValidator(new Command(new DownloadJSONCommand(), CommandType.REQUEST), CommandType.INTERNAL);
+        CommandValidator invalidType = new CommandValidator(new Command(new DownloadJSONCommand(), CommandType.EXPORT), CommandType.INTERNAL);
         Assertions.assertFalse(invalidType.validate());
     }
 }

@@ -2,6 +2,7 @@ package com.lionfish.robo_clipping_kindle.controller;
 
 import com.lionfish.robo_clipping_kindle.TestRedisConfiguration;
 import com.lionfish.robo_clipping_kindle.domain.book.BookClippings;
+import com.lionfish.robo_clipping_kindle.domain.command.CommandType;
 import com.lionfish.robo_clipping_kindle.domain.request.ExportRequestDTO;
 import com.lionfish.robo_clipping_kindle.domain.response.ExportResponseDTO;
 import com.lionfish.robo_clipping_kindle.domain.response.ResponseDTO;
@@ -42,7 +43,7 @@ class ClippingControllerTest {
         ClippingController controller = new ClippingController();
         ExportRequestDTO file = new ExportRequestDTO(clippingToken, clippings);
 
-        Object responseObj = controller.export("download-json", file);
+        Object responseObj = controller.download("json", file);
         Assertions.assertNotNull(responseObj);
 
         ResponseEntity<ResponseDTO> response = (ResponseEntity<ResponseDTO>) responseObj;

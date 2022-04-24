@@ -3,17 +3,16 @@ package com.lionfish.robo_clipping_kindle.command;
 import com.lionfish.robo_clipping_kindle.domain.command.Command;
 import com.lionfish.robo_clipping_kindle.domain.command.CommandType;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 /***
  * Responsible for holding and returning all commands.
  */
 public enum CommandMapEnum {
-    RESPONSE("response", "ResponseCommand", CommandType.INTERNAL),
-    DOWNLOAD_JSON("download-json", "DownloadJSONCommand", CommandType.REQUEST),
-    DOWNLOAD_DOCX("download-docx", "DownloadDocxCommand", CommandType.REQUEST),
-    NOTION("notion", "NotionCommand", CommandType.REQUEST);
+    INTERNAL_RESPONSE("internal-response", "ResponseCommand", CommandType.INTERNAL),
+    DOWNLOAD_JSON("download-json", "DownloadJSONCommand", CommandType.DOWNLOAD),
+    DOWNLOAD_DOCX("download-docx", "DownloadDocxCommand", CommandType.DOWNLOAD),
+    EXPORT_NOTION("export-notion", "NotionCommand", CommandType.EXPORT);
 
     private static HashMap<String, Command> commandMap;
     private static final String FQN = "com.lionfish.robo_clipping_kindle.command.";

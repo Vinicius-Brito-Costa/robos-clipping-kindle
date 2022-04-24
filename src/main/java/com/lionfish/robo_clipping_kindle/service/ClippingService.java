@@ -1,10 +1,18 @@
 package com.lionfish.robo_clipping_kindle.service;
 
+import com.lionfish.robo_clipping_kindle.command.CommandMapEnum;
+import com.lionfish.robo_clipping_kindle.controller.response.ResponseData;
+import com.lionfish.robo_clipping_kindle.controller.response.ResponseMap;
 import com.lionfish.robo_clipping_kindle.domain.book.BookClippings;
 import com.lionfish.robo_clipping_kindle.domain.book.Books;
 import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
+import com.lionfish.robo_clipping_kindle.domain.command.Command;
+import com.lionfish.robo_clipping_kindle.domain.command.CommandType;
+import com.lionfish.robo_clipping_kindle.domain.request.ExportRequestDTO;
+import com.lionfish.robo_clipping_kindle.domain.response.ExportResponseDTO;
 import com.lionfish.robo_clipping_kindle.service.template.DefaultClippingTemplate;
 import com.lionfish.robo_clipping_kindle.service.template.IClippingTemplate;
+import com.lionfish.robo_clipping_kindle.validator.CommandValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +28,42 @@ public class ClippingService {
     public static final String BREAK_ROW = "\n";
 
     private ClippingService(){}
+
+
+    public static ResponseData buildResponseMessage(CommandType type, String command, ExportRequestDTO request){
+        ResponseData responseData;
+        logger.info("[ Message ] Command: {{}}, CommandType: {{}}", command, type);
+        if(type == null || CommandType.INTERNAL.equals(type)){
+            responseData = new ResponseData(ResponseMap.BAD_REQUEST);
+            responseData.setBody("Invalid path.");
+            logger.error("[ Error ] Invalid command/path combination.");
+            return responseData;
+        }
+
+        Command comm = CommandMapEnum.getCommandClass(type.getType() + "-" + command);
+        CommandValidator commandValidator = new CommandValidator(comm, type);
+        if(commandValidator.validate()){
+
+            logger.info("[ Message ] Processing clippings");
+
+            ExportResponseDTO commandResponse = (ExportResponseDTO) comm.getCommandClass().execute(request.getClippings());
+            if(commandResponse != null && commandResponse.getResult() != null
+                    && commandResponse.getClippingCount() > 0
+                    && commandResponse.getBookCount() > 0){
+
+                responseData = new ResponseData(ResponseMap.OK);
+                responseData.setBody(commandResponse);
+            }
+            else{
+                responseData = new ResponseData(ResponseMap.BAD_REQUEST);
+            }
+        }
+        else{
+            responseData = new ResponseData(ResponseMap.BAD_REQUEST);
+            responseData.setBody("Invalid " + type.getType() + " type " + command );
+        }
+        return responseData;
+    }
 
     /***
      * Clean, format and join(by book title) clippings

@@ -2,21 +2,13 @@ package com.lionfish.robo_clipping_kindle.controller;
 
 import com.lionfish.robo_clipping_kindle.command.CommandMapEnum;
 import com.lionfish.robo_clipping_kindle.command.ICommand;
-import com.lionfish.robo_clipping_kindle.controller.response.ResponseData;
-import com.lionfish.robo_clipping_kindle.controller.response.ResponseMap;
-import com.lionfish.robo_clipping_kindle.database.redis.RedisConnect;
-import com.lionfish.robo_clipping_kindle.domain.command.Command;
 import com.lionfish.robo_clipping_kindle.domain.command.CommandType;
 import com.lionfish.robo_clipping_kindle.domain.request.ExportRequestDTO;
-import com.lionfish.robo_clipping_kindle.domain.response.ExportResponseDTO;
-import com.lionfish.robo_clipping_kindle.validator.CommandValidator;
+import com.lionfish.robo_clipping_kindle.service.ClippingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import redis.clients.jedis.JedisPooled;
-
-import javax.websocket.server.PathParam;
 
 
 @RestController
@@ -27,50 +19,30 @@ import javax.websocket.server.PathParam;
 public class ClippingController {
 
     private static final Logger logger = LoggerFactory.getLogger(ClippingController.class);
-    private static final String DEFAULT_FILE_NAME_SEPARATOR = "-";
 
-    ICommand responseCommand = CommandMapEnum.getCommandClass("response").getCommandClass();
+    ICommand responseCommand = CommandMapEnum.getCommandClass("internal-response").getCommandClass();
 
     /**
-     * Export clippings with especified command(eg: Notion, Markdown, Json, etc...)
-     * @param command desired command to process the clippingFile
+     * Download clippings with especified format(eg: Docx, Json, etc...)
+     * @param format desired format to process the clippingFile
      * @param exportRequestDTO string containing all data from 'My Clippings'
-     * @return byte[]
+     * @return ResponseEntity
      */
-    @PostMapping("/export")
-    public Object export(@PathParam(value = "command") String command, @RequestBody ExportRequestDTO exportRequestDTO){
-        logger.info("[Message] Export process initiated...");
-        Command comm = CommandMapEnum.getCommandClass(command);
-        ResponseData responseData;
-        CommandValidator commandValidator = new CommandValidator(comm, CommandType.REQUEST);
-        if(commandValidator.validate()){
-            JedisPooled redis = RedisConnect.getRedisConnection();
-            String[] tokenInfo = exportRequestDTO.getToken().split(DEFAULT_FILE_NAME_SEPARATOR);
-            String currentIndex = tokenInfo[2];
-            String currentToken = tokenInfo[0] + DEFAULT_FILE_NAME_SEPARATOR + tokenInfo[2];
+    @PostMapping("/download/{format}")
+    public Object download(@PathVariable(value = "format") String format, @RequestBody ExportRequestDTO exportRequestDTO){
+        logger.info("[Message] Download process initiated...");
+        return responseCommand.execute(ClippingService.buildResponseMessage(CommandType.DOWNLOAD, format, exportRequestDTO));
+    }
 
-            redis.set(currentToken, currentIndex);
-            logger.info("[Redis] Token {{}} created.", currentToken);
-
-            logger.info("[Message] Processing {{}} clippings", currentToken);
-
-            ExportResponseDTO commandResponse = (ExportResponseDTO) comm.getCommandClass().execute(exportRequestDTO.getClippings());
-            if(commandResponse != null && commandResponse.getResult() != null
-                    && commandResponse.getClippingCount() > 0
-                    && commandResponse.getBookCount() > 0){
-
-                responseData = new ResponseData(ResponseMap.OK);
-                responseData.setBody(commandResponse);
-            }
-            else{
-                responseData = new ResponseData(ResponseMap.BAD_REQUEST);
-            }
-        }
-        else{
-            responseData = new ResponseData(ResponseMap.BAD_REQUEST);
-            responseData.setBody("Invalid command " + command );
-        }
-
-        return responseCommand.execute(responseData);
+    /**
+     * Export clippings with especified format(eg: Notion, etc...)
+     * @param integration desired format to process the clippingFile
+     * @param exportRequestDTO string containing all data from 'My Clippings'
+     * @return ResponseEntity
+     */
+    @PostMapping("/export/{integration}")
+    public Object export(@PathVariable(value = "integration") String integration, @RequestBody ExportRequestDTO exportRequestDTO){
+        logger.info("[Message] Download process initiated...");
+        return responseCommand.execute(ClippingService.buildResponseMessage(CommandType.EXPORT, integration, exportRequestDTO));
     }
 }

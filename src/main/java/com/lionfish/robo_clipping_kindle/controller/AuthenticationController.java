@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
         produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
 
-    ICommand responseCommand = CommandMapEnum.getCommandClass("response").getCommandClass();
+    ICommand responseCommand = CommandMapEnum.getCommandClass("internal-response").getCommandClass();
 
     /***
      * Generate a JWT token using a user/password

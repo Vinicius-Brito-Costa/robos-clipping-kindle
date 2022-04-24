@@ -18,12 +18,13 @@ public class CommandValidator implements IValidator{
 
     @Override
     public boolean validate(){
-        boolean commandTypeNotNull = command.getCommandType() != null;
+        boolean commandTypeNotNull;
         boolean isRequiredCommandType;
         try{
+            commandTypeNotNull = command.getCommandType() != null;
             isRequiredCommandType = requiredType.equals(command.getCommandType());
         } catch (NullPointerException e){
-            isRequiredCommandType = false;
+            return false;
         }
         boolean commandClassIsNotNull = command.getCommandClass() != null;
         boolean valid = commandTypeNotNull && isRequiredCommandType && commandClassIsNotNull;

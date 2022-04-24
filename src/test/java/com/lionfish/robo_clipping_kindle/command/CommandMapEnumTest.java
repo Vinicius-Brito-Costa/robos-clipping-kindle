@@ -13,7 +13,7 @@ class CommandMapEnumTest {
         Assertions.assertNotNull(command);
         CommandType type = command.getCommandType();
         Assertions.assertNotNull(type);
-        Assertions.assertEquals(CommandType.REQUEST, type);
+        Assertions.assertEquals(CommandType.DOWNLOAD, type);
         DownloadJSONCommand castedCommand = (DownloadJSONCommand) command.getCommandClass();
         Assertions.assertNotNull(castedCommand);
     }
@@ -24,14 +24,14 @@ class CommandMapEnumTest {
         Assertions.assertNotNull(command);
         CommandType type = command.getCommandType();
         Assertions.assertNotNull(type);
-        Assertions.assertEquals(CommandType.REQUEST, type);
+        Assertions.assertEquals(CommandType.DOWNLOAD, type);
         DownloadDocxCommand castedCommand = (DownloadDocxCommand) command.getCommandClass();
         Assertions.assertNotNull(castedCommand);
     }
 
     @Test
     void getResponseCommandIsOK(){
-        Command command = CommandMapEnum.getCommandClass("response");
+        Command command = CommandMapEnum.getCommandClass("internal-response");
         Assertions.assertNotNull(command);
         CommandType type = command.getCommandType();
         Assertions.assertNotNull(type);
