@@ -7,12 +7,13 @@ import java.util.HashMap;
  * Responsible for holding and returning all commands.
  */
 public enum CommandMapEnum {
-    Response("response", "ResponseCommand"),
-    Download("download", "DownloadCommand"),
-    Notion("notion", "NotionCommand");
+    RESPONSE("response", "ResponseCommand"),
+    DOWNLOAD("download", "DownloadCommand"),
+    DOWNLOAD_DOCX("download-docx", "DownloadDocxCommand"),
+    NOTION("notion", "NotionCommand");
 
     private static HashMap<String, String> commandMap;
-    private final static String FQN = "com.lionfish.robo_clipping_kindle.command.";
+    private static final String FQN = "com.lionfish.robo_clipping_kindle.command.";
 
     CommandMapEnum(String commandName, String commandClass){
         addCommand(commandName, FQN + commandClass);
@@ -27,8 +28,8 @@ public enum CommandMapEnum {
 
     /***
      * Returns a command based on the provided string
-     * @param command
-     * @return
+     * @param command desired command
+     * @return the selected command
      */
     public static ICommand getCommandClass(String command){
         String returnedClass = commandMap.get(command);
@@ -36,8 +37,7 @@ public enum CommandMapEnum {
             return null;
         }
         try {
-            ICommand comm = (ICommand) ICommand.class.getClassLoader().loadClass(returnedClass).getDeclaredConstructor().newInstance();
-            return comm;
+            return (ICommand) ICommand.class.getClassLoader().loadClass(returnedClass).getDeclaredConstructor().newInstance();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
             return null;
         }

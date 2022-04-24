@@ -1,16 +1,8 @@
 package com.lionfish.robo_clipping_kindle.command;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
+import com.lionfish.robo_clipping_kindle.domain.book.Books;
 import com.lionfish.robo_clipping_kindle.domain.response.ExportResponseDTO;
-import com.lionfish.robo_clipping_kindle.domain.template.DefaultClippingTemplate;
-import com.lionfish.robo_clipping_kindle.domain.template.IClippingTemplate;
 import com.lionfish.robo_clipping_kindle.service.ClippingService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Return clippings formated in a file for download
@@ -21,36 +13,10 @@ import org.slf4j.LoggerFactory;
  */
 public class DownloadCommand implements ICommand{
 
-    private static final Logger logger = LoggerFactory.getLogger(DownloadCommand.class);
-
     @Override
     public Object execute(Object object) {
-        IClippingTemplate template = new DefaultClippingTemplate();
-        logger.info("[Message] Clipping template: Default");
-        HashMap<String, List<Clipping>> bookClippings = new HashMap<>();
-        int totalClippings = 0;
-        for(List<String> clip : ClippingService.getClippings((String) object)){
-            List<String> cleanedClipping = ClippingService.removeEmptyBlankAndInvalid(clip);
-            if(ClippingService.removeClipping(cleanedClipping)){
-                logger.debug("[Debug] Clipping removed.");
-                continue;
-            }
-            Clipping formattedClipping = template.formatClipping(cleanedClipping);
-            String clippingTitle = formattedClipping.getTitle();
-            List<Clipping> currentClippings = bookClippings.get(clippingTitle);
-            if(currentClippings != null){
-                currentClippings.add(formattedClipping);
-                totalClippings++;
-                continue;
-            }
-            currentClippings = new ArrayList<>();
-            currentClippings.add(formattedClipping);
-            bookClippings.put(clippingTitle, currentClippings);
-            totalClippings++;
-        }
-        logger.info("[Message] Total books: {}", bookClippings.size());
-        logger.info("[Message] Total clippings: {}", totalClippings);
-        return new ExportResponseDTO(bookClippings.size(), totalClippings, bookClippings);
+        Books books = ClippingService.getBooksWithClippings((String) object);
+        return new ExportResponseDTO(books.getBookCount(), books.getTotalClippingCount(), books.getBookClippings());
     }
     
 }

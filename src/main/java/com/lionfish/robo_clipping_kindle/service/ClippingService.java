@@ -1,11 +1,14 @@
 package com.lionfish.robo_clipping_kindle.service;
 
+import com.lionfish.robo_clipping_kindle.domain.book.BookClippings;
+import com.lionfish.robo_clipping_kindle.domain.book.Books;
+import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
+import com.lionfish.robo_clipping_kindle.service.template.DefaultClippingTemplate;
+import com.lionfish.robo_clipping_kindle.service.template.IClippingTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Holds all operations involving clippings, mainly format and segregate
@@ -17,6 +20,45 @@ public class ClippingService {
     public static final String BREAK_ROW = "\n";
 
     private ClippingService(){}
+
+    /***
+     * Clean, format and join(by book title) clippings
+     * @param clippings String that represents 'My Clippings' file
+     * @return Books containing all the clippings extracted from the provided String
+     */
+    public static Books getBooksWithClippings(String clippings){
+        IClippingTemplate template = new DefaultClippingTemplate();
+        logger.info("[Message] Clipping template: Default");
+        HashMap<String, List<Clipping>> fullBookClippings = new HashMap<>();
+        int totalClippings = 0;
+        for(List<String> clip : ClippingService.getClippings(clippings)){
+            List<String> cleanedClipping = ClippingService.removeEmptyBlankAndInvalid(clip);
+            if(ClippingService.removeClipping(cleanedClipping)){
+                logger.debug("[Debug] Clipping removed.");
+                continue;
+            }
+            Clipping formattedClipping = template.formatClipping(cleanedClipping);
+            String clippingTitle = formattedClipping.getTitle();
+            List<Clipping> currentClippings = fullBookClippings.get(clippingTitle);
+            if(currentClippings != null){
+                currentClippings.add(formattedClipping);
+                totalClippings++;
+                continue;
+            }
+            currentClippings = new ArrayList<>();
+            currentClippings.add(formattedClipping);
+            fullBookClippings.put(clippingTitle, currentClippings);
+            totalClippings++;
+        }
+        logger.info("[Message] Total books: {}", fullBookClippings.size());
+        logger.info("[Message] Total clippings: {}", totalClippings);
+        List<BookClippings> bookClippings = new ArrayList<>();
+        for(Map.Entry<String, List<Clipping>> entry : fullBookClippings.entrySet()){
+            List<Clipping> clipps = entry.getValue();
+            bookClippings.add(new BookClippings(entry.getKey(), clipps.size(), clipps));
+        }
+        return new Books(fullBookClippings.size(), totalClippings, bookClippings);
+    }
 
     /**
      * Separate individual clippings as single String

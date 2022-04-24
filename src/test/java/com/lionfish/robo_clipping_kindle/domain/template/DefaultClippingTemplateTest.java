@@ -1,13 +1,14 @@
 package com.lionfish.robo_clipping_kindle.domain.template;
 
 import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
+import com.lionfish.robo_clipping_kindle.service.template.DefaultClippingTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class DefaultClippingTemplateTest {
+class DefaultClippingTemplateTest {
 
     List<String> allOk = Arrays.asList(
             "Trabalhe 4 horas por semana (Timothy Ferriss)",
