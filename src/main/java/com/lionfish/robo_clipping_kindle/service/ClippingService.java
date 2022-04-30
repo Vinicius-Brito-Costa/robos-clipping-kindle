@@ -39,11 +39,11 @@ public class ClippingService {
      */
     public static ResponseData buildResponseMessage(CommandType type, String command, ExportRequestDTO request){
         ResponseData responseData;
-        logger.info("[ Message ] Command: {{}}, CommandType: {{}}", command, type);
+        logger.info("[Message] Command: {{}}, CommandType: {{}}", command, type);
         if(type == null || CommandType.INTERNAL.equals(type)){
             responseData = new ResponseData(ResponseMap.BAD_REQUEST);
             responseData.setBody("Invalid path.");
-            logger.error("[ Error ] Invalid command/path combination.");
+            logger.error("[Error] Invalid command/path combination.");
             return responseData;
         }
 
@@ -51,7 +51,7 @@ public class ClippingService {
         CommandValidator commandValidator = new CommandValidator(comm, type);
         if(commandValidator.validate()){
 
-            logger.info("[ Message ] Processing clippings");
+            logger.info("[Message] Processing clippings");
 
             ExportResponseDTO commandResponse = (ExportResponseDTO) comm.getCommandClass().execute(request.getClippings());
             if(commandResponse != null && commandResponse.getResult() != null
