@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum CommandType {
     INTERNAL("internal"),
     EXPORT("export"),
+    INTEGRATION("integration"),
     DOWNLOAD("download");
 
     String type;

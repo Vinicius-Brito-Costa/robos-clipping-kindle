@@ -1,4 +1,4 @@
-package com.lionfish.robo_clipping_kindle.command.notion;
+package com.lionfish.robo_clipping_kindle.command.notion.block;
 
 import lombok.Getter;
 

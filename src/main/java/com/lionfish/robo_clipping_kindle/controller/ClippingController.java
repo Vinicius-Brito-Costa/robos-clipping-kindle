@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/api/v1",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
 public class ClippingController {
 
@@ -35,7 +34,7 @@ public class ClippingController {
     }
 
     /**
-     * Export clippings with especified format(eg: Notion, etc...)
+     * Export clippings with specified format(eg: Notion, etc...)
      * @param integration desired format to process the clippingFile
      * @param exportRequestDTO string containing all data from 'My Clippings'
      * @return ResponseEntity

@@ -7,9 +7,9 @@ import lombok.Getter;
 public class ParagraphBlock implements IBlock {
 
     @Getter
-    private static final String object = "block";
+    private final String object = "block";
     @Getter
-    private static final String type = "paragraph";
+    private final String type = "paragraph";
     private RichText paragraph = new RichText();
 
     public ParagraphBlock(Title[] titles){

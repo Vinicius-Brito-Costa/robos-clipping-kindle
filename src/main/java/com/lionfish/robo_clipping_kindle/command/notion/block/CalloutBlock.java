@@ -11,9 +11,9 @@ import lombok.Setter;
 public class CalloutBlock implements IBlock{
 
     @Getter
-    private static final String object = "block";
+    private final String object = "block";
     @Getter
-    private static final String type = "callout";
+    private final String type = "callout";
     private RichText callout = new RichText();
     @Getter @Setter
     private IFileObject icon;

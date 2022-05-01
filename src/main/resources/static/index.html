@@ -7,16 +7,75 @@
     <title>Document</title>
 </head>
 <body>
-    <button onclick="activateCommand('download')">DOWNLOAD-COMMAND</button>
+    <button onclick="activateCommand('download-json')">JSON-COMMAND</button>
     <button onclick="activateCommand('download-docx')">DOCX-COMMAND</button>
-    <div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event)" style="background-color: blueviolet; color: white; height: 200px">
+    <button onclick="activateCommand('export-notion')">NOTION-COMMAND</button>
+    <div id="drop-zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event)" style="background-color: blueviolet; color: white; height: 200px; display: none;">
         <p>Drag your 'My Clippings.txt' file here.</p>
     </div>
     <script>
         let command = "";
+        let clientToken = "";
+        function checkState(){
+            let state = location.search.substring(1);
+            console.log(state)
+            if(state != undefined && state != ""){
+                let states = state.split("&")
+                let stateObj = {};
+                for(index in states){
+                    let keyValue = states[index].split("=");
+                    stateObj[keyValue[0]] = keyValue[1]
+                }
+                console.log(stateObj)
+                if(stateObj["code"] != undefined){
+                    command = "export-notion";
+                    clientToken = stateObj["code"];
+                    showDropZone();
+                }
+            }
+        }
+        checkState();
         function activateCommand(comm){
-            command = comm;
+            let newCommand = comm.split("-")
+            if(newCommand[0] == "export"){
+                authorizeProcessing(newCommand[1])
+            }
+            command = newCommand.join("/");
             console.log(command);
+            showDropZone();
+        }
+        function authorizeProcessing(command){
+            let map = {
+                notion: () => {
+                    let options = {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            token: "token"
+                        })
+                    }
+                    fetch("http://localhost:8080/robo/api/v1/authentication/integration/notion", options)
+                    .then(res => {
+                        if(res.ok){
+                            return res.json();
+                        }
+                    })
+                    .then(res => location.assign(res.data.integrationUrl));
+                }
+            }
+            const request = {
+                clientId: "37664e92-3d40-4c93-afed-48f673539692",
+                callback: "https://webhook.site/46d396ce-5cfc-44b1-8afe-199ac8f17fe4",
+                state: "none"
+            }
+            map[command](request)
+
+        }
+        function showDropZone(){
+            let dropZone = document.getElementById("drop-zone");
+            dropZone.style.display = "block";
         }
         async function upload(file){
             let fileName = "biruleibe-" + file.length + "-test"
@@ -27,14 +86,23 @@
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json;charset=utf-8"
-                    },
-                    body: JSON.stringify({
-                        token: fileName,
-                        clippings: res.target.result
-                    })
+                    }
                 }
+                let body = {
+                    token: fileName,
+                    clippings: res.target.result
+                }
+                if(clientToken != ""){
+                    body = {
+                        token: fileName,
+                        clientToken: clientToken,
+                        clippings: res.target.result
+                    }
+                }
+                options["body"] = JSON.stringify(body);
+                console.log(clientToken)
                 console.log(options)
-                fetch("http://localhost:8080/robo/api/v1/export?command=" + command, options)
+                fetch("http://localhost:8080/robo/api/v1/" + command.split("-").join("/"), options)
                 .then(res => {
                     if(res.ok){
                         return res.json()

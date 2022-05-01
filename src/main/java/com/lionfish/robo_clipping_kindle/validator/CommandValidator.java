@@ -28,7 +28,7 @@ public class CommandValidator implements IValidator{
         }
         boolean commandClassIsNotNull = command.getCommandClass() != null;
         boolean valid = commandTypeNotNull && isRequiredCommandType && commandClassIsNotNull;
-        logger.info("[ Message ] Is command valid? {}", valid);
+        logger.info("[Message] Is command valid? {}", valid);
         return valid;
     }
 }

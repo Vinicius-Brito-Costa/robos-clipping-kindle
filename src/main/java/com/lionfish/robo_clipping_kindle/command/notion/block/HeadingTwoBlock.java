@@ -7,9 +7,9 @@ import lombok.Getter;
 public class HeadingTwoBlock implements IBlock{
 
     @Getter
-    private static final String object = "block";
+    private final String object = "block";
     @Getter
-    private static final String type = "heading_2";
+    private final String type = "heading_2";
     private RichText heading = new RichText();
 
     public HeadingTwoBlock(Title[] titles){
