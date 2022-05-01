@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum CommandType {
+    COMMAND("command"),
     INTERNAL("internal"),
     EXPORT("export"),
     INTEGRATION("integration"),

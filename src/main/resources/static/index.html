@@ -111,7 +111,8 @@
                     console.log(res);
                 })
                 .then(res => {
-                    if(command == "download"){
+                    console.log(command)
+                    if(command == "download/json"){
                         let books = {};
                         res.data.result.forEach(book => {
                             books[book.title] = book.clippings
@@ -119,7 +120,7 @@
 
                         download(new Blob([JSON.stringify(books)], {type: "application/json"}), "json");
                     }
-                    else if(command == "download-docx"){
+                    else if(command == "download/docx"){
                         download(new Blob([res.data.result], {type: "text/plain"}), "docx");
                     }
                 });

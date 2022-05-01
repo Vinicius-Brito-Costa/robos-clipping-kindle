@@ -5,7 +5,6 @@ import com.lionfish.robo_clipping_kindle.command.ICommand;
 import com.lionfish.robo_clipping_kindle.controller.response.ResponseData;
 import com.lionfish.robo_clipping_kindle.controller.response.ResponseMap;
 import com.lionfish.robo_clipping_kindle.domain.command.Command;
-import com.lionfish.robo_clipping_kindle.domain.command.CommandType;
 import com.lionfish.robo_clipping_kindle.domain.request.GetTokenRequestDTO;
 import com.lionfish.robo_clipping_kindle.domain.request.ValidateTokenRequestDTO;
 import com.lionfish.robo_clipping_kindle.domain.response.GetTokenResponseDTO;
@@ -66,8 +65,8 @@ public class AuthenticationController {
         if(request != null){
             if(request.getToken() != null){
                 Command command = CommandMapEnum.getCommandClass("auth-" + integration);
-                CommandValidator validator = new CommandValidator(command, CommandType.INTEGRATION);
-                if(validator.validate()){
+                CommandValidator validator = new CommandValidator();
+                if(validator.validate(command)){
                     IntegrationAuthenticationResponse integrationResponse = (IntegrationAuthenticationResponse) command.getCommandClass().execute(request);
                     response = new ResponseData(ResponseMap.OK);
                     response.setBody(integrationResponse);

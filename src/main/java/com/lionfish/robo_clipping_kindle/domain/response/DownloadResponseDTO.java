@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ExportResponseDTO {
+public class DownloadResponseDTO {
     private int bookCount;
     private int clippingCount;
     private Object result;

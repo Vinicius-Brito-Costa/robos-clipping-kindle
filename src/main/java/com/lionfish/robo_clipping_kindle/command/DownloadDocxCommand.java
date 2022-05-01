@@ -3,7 +3,7 @@ package com.lionfish.robo_clipping_kindle.command;
 import com.lionfish.robo_clipping_kindle.domain.book.BookClippings;
 import com.lionfish.robo_clipping_kindle.domain.book.Books;
 import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
-import com.lionfish.robo_clipping_kindle.domain.response.ExportResponseDTO;
+import com.lionfish.robo_clipping_kindle.domain.response.DownloadResponseDTO;
 import com.lionfish.robo_clipping_kindle.service.ClippingService;
 import com.lionfish.robo_clipping_kindle.util.TagUtil;
 import org.slf4j.Logger;
@@ -23,17 +23,16 @@ public class DownloadDocxCommand implements ICommand{
     private static final String FONT_FAMILY = "font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif";
 
     @Override
-    public ExportResponseDTO execute(Object object) {
+    public DownloadResponseDTO execute(Object object) {
         Books books = ClippingService.getBooksWithClippings((String) object);
         StringBuilder htmlBooks = new StringBuilder();
         for (BookClippings bookClippings : books.getBookClippings()){
             htmlBooks.append(buildBook(bookClippings.getTitle(), bookClippings.getClippingCount(), bookClippings.getClippings()));
         }
-        StringBuilder main = new StringBuilder(TagUtil.createSingleTag("!DOCTYPE docx"));
-        main.append(
-                TagUtil.createTag("html",
-                        TagUtil.createTagWithStyle("body", htmlBooks.toString(), FONT_FAMILY)));
-        return new ExportResponseDTO(books.getBookCount(), books.getTotalClippingCount(), main.toString());
+        String main = TagUtil.createSingleTag("!DOCTYPE docx");
+        main += TagUtil.createTag("html",
+                        TagUtil.createTagWithStyle("body", htmlBooks.toString(), FONT_FAMILY));
+        return new DownloadResponseDTO(books.getBookCount(), books.getTotalClippingCount(), main);
     }
 
     private String buildBook(String title, int bookClippingsCount, List<Clipping> clippingList){

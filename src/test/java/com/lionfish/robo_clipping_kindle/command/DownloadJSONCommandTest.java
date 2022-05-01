@@ -1,7 +1,7 @@
 package com.lionfish.robo_clipping_kindle.command;
 
 import com.lionfish.robo_clipping_kindle.domain.book.BookClippings;
-import com.lionfish.robo_clipping_kindle.domain.response.ExportResponseDTO;
+import com.lionfish.robo_clipping_kindle.domain.response.DownloadResponseDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +33,7 @@ class DownloadJSONCommandTest {
     @SuppressWarnings("unchecked")
     void downloadCommandIsOK(){
         DownloadJSONCommand downloadJSONCommand = new DownloadJSONCommand();
-        ExportResponseDTO result = downloadJSONCommand.execute(okPayload);
+        DownloadResponseDTO result = downloadJSONCommand.execute(okPayload);
         Assertions.assertEquals(1, result.getBookCount());
         Assertions.assertEquals(3, ((List<BookClippings>) result.getResult()).get(0).getClippingCount());
     }

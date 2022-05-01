@@ -1,7 +1,7 @@
 package com.lionfish.robo_clipping_kindle.command;
 
 import com.lionfish.robo_clipping_kindle.domain.book.Books;
-import com.lionfish.robo_clipping_kindle.domain.response.ExportResponseDTO;
+import com.lionfish.robo_clipping_kindle.domain.response.DownloadResponseDTO;
 import com.lionfish.robo_clipping_kindle.service.ClippingService;
 
 /**
@@ -14,9 +14,9 @@ import com.lionfish.robo_clipping_kindle.service.ClippingService;
 public class DownloadJSONCommand implements ICommand{
 
     @Override
-    public ExportResponseDTO execute(Object object) {
+    public DownloadResponseDTO execute(Object object) {
         Books books = ClippingService.getBooksWithClippings((String) object);
-        return new ExportResponseDTO(books.getBookCount(), books.getTotalClippingCount(), books.getBookClippings());
+        return new DownloadResponseDTO(books.getBookCount(), books.getTotalClippingCount(), books.getBookClippings());
     }
     
 }

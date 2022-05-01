@@ -2,16 +2,14 @@ package com.lionfish.robo_clipping_kindle.controller;
 
 import com.lionfish.robo_clipping_kindle.TestRedisConfiguration;
 import com.lionfish.robo_clipping_kindle.domain.book.BookClippings;
-import com.lionfish.robo_clipping_kindle.domain.command.CommandType;
-import com.lionfish.robo_clipping_kindle.domain.request.ExportRequestDTO;
-import com.lionfish.robo_clipping_kindle.domain.response.ExportResponseDTO;
+import com.lionfish.robo_clipping_kindle.domain.request.DownloadRequestDTO;
+import com.lionfish.robo_clipping_kindle.domain.response.DownloadResponseDTO;
 import com.lionfish.robo_clipping_kindle.domain.response.ResponseDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
-import java.util.HashMap;
 import java.util.List;
 
 @SpringBootTest(classes = TestRedisConfiguration.class)
@@ -41,7 +39,7 @@ class ClippingControllerTest {
     @SuppressWarnings("unchecked")
     void controllerUsageOfDownloadJSONCommandIsOK(){
         ClippingController controller = new ClippingController();
-        ExportRequestDTO file = new ExportRequestDTO(clippingToken, clippings);
+        DownloadRequestDTO file = new DownloadRequestDTO(clippingToken, clippings);
 
         Object responseObj = controller.download("json", file);
         Assertions.assertNotNull(responseObj);
@@ -52,10 +50,10 @@ class ClippingControllerTest {
         ResponseDTO responseData = response.getBody();
         Assertions.assertNotNull(responseData);
 
-        ExportResponseDTO exportResponseDTO = (ExportResponseDTO) responseData.getData();
-        Assertions.assertNotNull(exportResponseDTO);
+        DownloadResponseDTO downloadResponseDTO = (DownloadResponseDTO) responseData.getData();
+        Assertions.assertNotNull(downloadResponseDTO);
 
-        List<BookClippings> dataMap = (List<BookClippings>) exportResponseDTO.getResult();
+        List<BookClippings> dataMap = (List<BookClippings>) downloadResponseDTO.getResult();
         Assertions.assertNotNull(dataMap);
 
     }

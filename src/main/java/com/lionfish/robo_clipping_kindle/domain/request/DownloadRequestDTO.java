@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Generated
-public class ExportRequestDTO {
+public class DownloadRequestDTO {
     private String token;
     private String clippings;
 }
