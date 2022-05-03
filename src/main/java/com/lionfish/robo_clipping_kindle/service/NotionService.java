@@ -2,20 +2,20 @@ package com.lionfish.robo_clipping_kindle.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lionfish.robo_clipping_kindle.command.notion.BuildPage;
-import com.lionfish.robo_clipping_kindle.command.notion.block.CalloutBlock;
-import com.lionfish.robo_clipping_kindle.command.notion.block.HeadingTwoBlock;
-import com.lionfish.robo_clipping_kindle.command.notion.block.IBlock;
-import com.lionfish.robo_clipping_kindle.command.notion.block.Text;
-import com.lionfish.robo_clipping_kindle.command.notion.page.PageObject;
-import com.lionfish.robo_clipping_kindle.command.notion.page.PageObjectDTO;
-import com.lionfish.robo_clipping_kindle.command.notion.page.Title;
-import com.lionfish.robo_clipping_kindle.controller.response.ResponseData;
-import com.lionfish.robo_clipping_kindle.domain.book.BookClippings;
+import com.lionfish.robo_clipping_kindle.domain.notion.NotionPageBuilder;
+import com.lionfish.robo_clipping_kindle.domain.notion.block.CalloutBlock;
+import com.lionfish.robo_clipping_kindle.domain.notion.block.HeadingTwoBlock;
+import com.lionfish.robo_clipping_kindle.domain.notion.block.IBlock;
+import com.lionfish.robo_clipping_kindle.domain.notion.block.Text;
+import com.lionfish.robo_clipping_kindle.domain.notion.page.PageObject;
+import com.lionfish.robo_clipping_kindle.domain.notion.page.PageObjectDTO;
+import com.lionfish.robo_clipping_kindle.domain.notion.page.Title;
+import com.lionfish.robo_clipping_kindle.domain.response.ResponseData;
+import com.lionfish.robo_clipping_kindle.domain.book.Book;
 import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
 import com.lionfish.robo_clipping_kindle.domain.command.CommandType;
-import com.lionfish.robo_clipping_kindle.domain.request.IntegrationRequestDTO;
-import com.lionfish.robo_clipping_kindle.util.FeignNotionUtil;
+import com.lionfish.robo_clipping_kindle.domain.request.IntegrationRequest;
+import com.lionfish.robo_clipping_kindle.feign.NotionFeignClient;
 import feign.Feign;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
@@ -40,7 +40,7 @@ public class NotionService {
 
     private NotionService(){}
 
-    public static ResponseData buildResponseMessage(CommandType type, String command, IntegrationRequestDTO request){
+    public static ResponseData buildResponseMessage(CommandType type, String command, IntegrationRequest request){
         return CommandService.buildResponse(type, command, request);
     }
 
@@ -51,11 +51,11 @@ public class NotionService {
      * @param parentPageId The pageId that was shared by the user in the frontend
      * @param notionToken Token used to authorize the action in notion.
      */
-    public static void uploadBookPages(List<BookClippings> bookClippings, String parentPageId, String notionToken){
-        FeignNotionUtil notion = getNotionClient();
+    public static void uploadBookPages(List<Book> bookClippings, String parentPageId, String notionToken){
+        NotionFeignClient notion = getNotionClient();
         ObjectMapper mapper = new ObjectMapper();
-        for(BookClippings clippings : bookClippings){
-            BuildPage pageBuilder = new BuildPage();
+        for(Book clippings : bookClippings){
+            NotionPageBuilder pageBuilder = new NotionPageBuilder();
 
             logger.info("[Message] Creating new page");
             pageBuilder.setParent(parentPageId);
@@ -84,13 +84,13 @@ public class NotionService {
      * Build notion feign client
      * @return notion client
      */
-    public static FeignNotionUtil getNotionClient(){
+    public static NotionFeignClient getNotionClient(){
         return Feign
                 .builder()
                 .client(new ApacheHttpClient())
                 .encoder(new GsonEncoder())
                 .decoder(new GsonDecoder())
-                .target(FeignNotionUtil.class, NOTION_URL);
+                .target(NotionFeignClient.class, NOTION_URL);
     }
 
     /***

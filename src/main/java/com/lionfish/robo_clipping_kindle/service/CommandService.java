@@ -1,8 +1,8 @@
 package com.lionfish.robo_clipping_kindle.service;
 
 import com.lionfish.robo_clipping_kindle.command.CommandMapEnum;
-import com.lionfish.robo_clipping_kindle.controller.response.ResponseData;
-import com.lionfish.robo_clipping_kindle.controller.response.ResponseMap;
+import com.lionfish.robo_clipping_kindle.domain.response.ResponseData;
+import com.lionfish.robo_clipping_kindle.domain.response.ResponseMap;
 import com.lionfish.robo_clipping_kindle.domain.command.Command;
 import com.lionfish.robo_clipping_kindle.domain.command.CommandType;
 import com.lionfish.robo_clipping_kindle.validator.IValidator;
@@ -26,14 +26,14 @@ public class CommandService {
 
         Command comm = CommandMapEnum.getCommandClass(type.getType() + "-" + command);
         IValidator commandValidator = ValidatorMapEnum.loadValidator(CommandType.COMMAND);
-        if(commandValidator.validate(comm)){
+        if(commandValidator != null && commandValidator.validate(comm)){
 
             logger.info("[Message] Processing clippings");
 
             try {
                 Object commandResponse = comm.getCommandClass().execute(request);
                 IValidator validator = ValidatorMapEnum.loadValidator(type);
-                if(validator.validate(commandResponse)){
+                if(validator != null && validator.validate(commandResponse)){
                     responseData = new ResponseData(ResponseMap.OK);
                     responseData.setBody(commandResponse);
                 }

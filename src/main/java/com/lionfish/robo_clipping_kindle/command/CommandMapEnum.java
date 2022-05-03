@@ -12,8 +12,8 @@ public enum CommandMapEnum {
     INTERNAL_RESPONSE("internal-response", "ResponseCommand", CommandType.INTERNAL),
     DOWNLOAD_JSON("download-json", "DownloadJSONCommand", CommandType.DOWNLOAD),
     DOWNLOAD_DOCX("download-docx", "DownloadDocxCommand", CommandType.DOWNLOAD),
-    EXPORT_NOTION("export-notion", "notion.NotionCommand", CommandType.EXPORT),
-    AUTH_NOTION("auth-notion", "notion.NotionAuthenticationCommand", CommandType.INTEGRATION);
+    EXPORT_NOTION("export-notion", "NotionCommand", CommandType.EXPORT),
+    AUTH_NOTION("auth-notion", "NotionAuthenticationCommand", CommandType.INTEGRATION);
 
     private static HashMap<String, Command> commandMap;
     private static final String FQN = "com.lionfish.robo_clipping_kindle.command.";

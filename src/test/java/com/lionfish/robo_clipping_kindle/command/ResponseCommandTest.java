@@ -1,8 +1,8 @@
 package com.lionfish.robo_clipping_kindle.command;
 
-import com.lionfish.robo_clipping_kindle.controller.response.ResponseData;
-import com.lionfish.robo_clipping_kindle.controller.response.ResponseMap;
-import com.lionfish.robo_clipping_kindle.domain.response.ResponseDTO;
+import com.lionfish.robo_clipping_kindle.domain.response.ResponseData;
+import com.lionfish.robo_clipping_kindle.domain.response.ResponseMap;
+import com.lionfish.robo_clipping_kindle.domain.response.DefaultResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +13,9 @@ class ResponseCommandTest {
     void responseCommandIsOK(){
         ResponseCommand responseCommand = new ResponseCommand();
         ResponseData responseData = new ResponseData(ResponseMap.OK);
-        ResponseEntity<ResponseDTO> response = responseCommand.execute(responseData);
+        ResponseEntity<DefaultResponse> response = responseCommand.execute(responseData);
         Assertions.assertNotNull(response);
-        ResponseDTO responseDTO = response.getBody();
+        DefaultResponse responseDTO = response.getBody();
         Assertions.assertNotNull(responseDTO);
         Assertions.assertEquals(responseDTO.getCode(), responseData.getCode());
         Assertions.assertEquals(responseDTO.getData(), responseData.getBody());

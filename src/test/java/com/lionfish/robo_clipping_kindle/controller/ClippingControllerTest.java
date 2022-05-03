@@ -1,18 +1,15 @@
 package com.lionfish.robo_clipping_kindle.controller;
 
-import com.lionfish.robo_clipping_kindle.TestRedisConfiguration;
-import com.lionfish.robo_clipping_kindle.domain.book.BookClippings;
-import com.lionfish.robo_clipping_kindle.domain.request.DownloadRequestDTO;
-import com.lionfish.robo_clipping_kindle.domain.response.DownloadResponseDTO;
-import com.lionfish.robo_clipping_kindle.domain.response.ResponseDTO;
+import com.lionfish.robo_clipping_kindle.domain.book.Book;
+import com.lionfish.robo_clipping_kindle.domain.request.DownloadRequest;
+import com.lionfish.robo_clipping_kindle.domain.response.DefaultResponse;
+import com.lionfish.robo_clipping_kindle.domain.response.DownloadResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@SpringBootTest(classes = TestRedisConfiguration.class)
 class ClippingControllerTest {
 
     String clippingToken = "biruleibe-1-0";
@@ -39,21 +36,21 @@ class ClippingControllerTest {
     @SuppressWarnings("unchecked")
     void controllerUsageOfDownloadJSONCommandIsOK(){
         ClippingController controller = new ClippingController();
-        DownloadRequestDTO file = new DownloadRequestDTO(clippingToken, clippings);
+        DownloadRequest file = new DownloadRequest(clippingToken, clippings);
 
         Object responseObj = controller.download("json", file);
         Assertions.assertNotNull(responseObj);
 
-        ResponseEntity<ResponseDTO> response = (ResponseEntity<ResponseDTO>) responseObj;
+        ResponseEntity<DefaultResponse> response = (ResponseEntity<DefaultResponse>) responseObj;
         Assertions.assertNotNull(response);
 
-        ResponseDTO responseData = response.getBody();
+        DefaultResponse responseData = response.getBody();
         Assertions.assertNotNull(responseData);
 
-        DownloadResponseDTO downloadResponseDTO = (DownloadResponseDTO) responseData.getData();
+        DownloadResponse downloadResponseDTO = (DownloadResponse) responseData.getData();
         Assertions.assertNotNull(downloadResponseDTO);
 
-        List<BookClippings> dataMap = (List<BookClippings>) downloadResponseDTO.getResult();
+        List<Book> dataMap = (List<Book>) downloadResponseDTO.getResult();
         Assertions.assertNotNull(dataMap);
 
     }

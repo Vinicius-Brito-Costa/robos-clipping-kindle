@@ -1,5 +1,6 @@
 package com.lionfish.robo_clipping_kindle.util;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,6 +20,13 @@ public class JWTUtil {
 
     private JWTUtil(){}
 
+    /**
+     * Returns a new JWT token
+     * @param user id of the token
+     * @param subject purpose of the token
+     * @param expTimeInSeconds time until this token is expired
+     * @return token
+     */
     public static String generateJWT(String user, String subject, long expTimeInSeconds){
         long now = System.currentTimeMillis();
         Date nowDate = new Date(now);
@@ -41,15 +49,37 @@ public class JWTUtil {
         return builder.compact();
     }
 
-    public static boolean validateToken(String token){
+    /**
+     * Retrieve JWT id
+     * @param jwt JWT Token
+     * @return JWT id if it was successful, else it will return null
+     */
+    public static String getUsername(String jwt){
         try{
-            Jwts.parser().setSigningKey(JWT_PASSWORD).parseClaimsJws(token.replace("Bearer ", "")).getBody();
+            return getBody(jwt).getId();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Check if token is valid by trying to parse JWT claims
+     * @param jwt JWT Token
+     * @return true if it was parsed successfully, otherwise will return false
+     */
+    public static boolean validateToken(String jwt){
+        try{
+            getBody(jwt);
         }
         catch (Exception e){
-            logger.error("[ Error ] Token is invalid", e);
+            logger.error("[ Error ] Token is invalid.", e);
             return false;
         }
         logger.info("[ Message ] Token is valid");
         return true;
+    }
+
+    private static Claims getBody(String jwt){
+        return Jwts.parser().setSigningKey(JWT_PASSWORD).parseClaimsJws(jwt.replace("Bearer ", "").strip()).getBody();
     }
 }

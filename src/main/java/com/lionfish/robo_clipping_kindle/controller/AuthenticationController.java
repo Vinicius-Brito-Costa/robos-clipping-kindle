@@ -2,17 +2,18 @@ package com.lionfish.robo_clipping_kindle.controller;
 
 import com.lionfish.robo_clipping_kindle.command.CommandMapEnum;
 import com.lionfish.robo_clipping_kindle.command.ICommand;
-import com.lionfish.robo_clipping_kindle.controller.response.ResponseData;
-import com.lionfish.robo_clipping_kindle.controller.response.ResponseMap;
-import com.lionfish.robo_clipping_kindle.domain.command.Command;
-import com.lionfish.robo_clipping_kindle.domain.request.GetTokenRequestDTO;
-import com.lionfish.robo_clipping_kindle.domain.request.ValidateTokenRequestDTO;
-import com.lionfish.robo_clipping_kindle.domain.response.GetTokenResponseDTO;
-import com.lionfish.robo_clipping_kindle.domain.response.IntegrationAuthenticationResponse;
+import com.lionfish.robo_clipping_kindle.domain.response.ResponseData;
+import com.lionfish.robo_clipping_kindle.domain.response.ResponseMap;
+import com.lionfish.robo_clipping_kindle.domain.request.AuthenticationRequest;
+import com.lionfish.robo_clipping_kindle.domain.response.AuthenticationResponse;
 import com.lionfish.robo_clipping_kindle.service.AuthenticationService;
-import com.lionfish.robo_clipping_kindle.validator.CommandValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "api/v1/authentication",
@@ -20,21 +21,24 @@ import org.springframework.web.bind.annotation.*;
         produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     ICommand responseCommand = CommandMapEnum.getCommandClass("internal-response").getCommandClass();
 
     /***
      * Generate a JWT token using a user/password
      * @return a new bearer token
      */
-    @PostMapping("/get-token")
-    public Object getToken(@RequestBody  GetTokenRequestDTO tokenRequest){
+    @PostMapping("/authenticate")
+    public Object getToken(@RequestBody AuthenticationRequest tokenRequest){
 
         ResponseData responseData;
 
-        String token = AuthenticationService.getToken(tokenRequest);
-        if(token != null){
+        if(AuthenticationService.validCredentials(tokenRequest.getUser(), tokenRequest.getPassword(), authenticationManager)){
+            String token = AuthenticationService.getToken(tokenRequest);
             responseData = new ResponseData(ResponseMap.OK);
-            responseData.setBody(new GetTokenResponseDTO(token));
+            responseData.setBody(new AuthenticationResponse(token));
         }
         else {
             responseData = new ResponseData(ResponseMap.BAD_REQUEST);
@@ -42,38 +46,5 @@ public class AuthenticationController {
         }
 
         return responseCommand.execute(responseData);
-    }
-
-    /***
-     * Verify if the provided token is valid
-     * @param token Bearer token
-     * @return token is valid or not
-     */
-    @PostMapping("/validate-token")
-    public Object validateToken(@RequestBody ValidateTokenRequestDTO token){
-
-        boolean isTokenValid = AuthenticationService.validateToken(token);
-        ResponseData responseData = new ResponseData(isTokenValid ? ResponseMap.OK : ResponseMap.BAD_REQUEST);
-        responseData.setBody(isTokenValid ? token.getToken() : "Invalid token");
-
-        return responseCommand.execute(responseData);
-    }
-
-    @PostMapping("/integration/{integration}")
-    public Object authenticateIntegration(@RequestBody ValidateTokenRequestDTO request, @PathVariable("integration") String integration){
-        ResponseData response = new ResponseData(ResponseMap.BAD_REQUEST);
-        if(request != null){
-            if(request.getToken() != null){
-                Command command = CommandMapEnum.getCommandClass("auth-" + integration);
-                CommandValidator validator = new CommandValidator();
-                if(validator.validate(command)){
-                    IntegrationAuthenticationResponse integrationResponse = (IntegrationAuthenticationResponse) command.getCommandClass().execute(request);
-                    response = new ResponseData(ResponseMap.OK);
-                    response.setBody(integrationResponse);
-                }
-            }
-        }
-
-        return responseCommand.execute(response);
     }
 }

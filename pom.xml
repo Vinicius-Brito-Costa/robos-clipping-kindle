@@ -44,18 +44,7 @@
             <version>11.8</version>
         </dependency>
 
-
         <!-- Misc -->
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>4.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.9.0</version>
-        </dependency>
 		<dependency>
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-gson</artifactId>
@@ -90,7 +79,6 @@
 			<version>2.4.0-b180830.0359</version>
 		</dependency>
 
-
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -124,9 +112,7 @@
 			<version>0.7.2</version>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>

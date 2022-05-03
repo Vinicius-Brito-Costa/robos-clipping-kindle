@@ -1,11 +1,11 @@
 package com.lionfish.robo_clipping_kindle.service;
 
-import com.lionfish.robo_clipping_kindle.controller.response.ResponseData;
-import com.lionfish.robo_clipping_kindle.domain.book.BookClippings;
-import com.lionfish.robo_clipping_kindle.domain.book.Books;
+import com.lionfish.robo_clipping_kindle.domain.response.ResponseData;
+import com.lionfish.robo_clipping_kindle.domain.book.Book;
+import com.lionfish.robo_clipping_kindle.domain.book.Library;
 import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
 import com.lionfish.robo_clipping_kindle.domain.command.CommandType;
-import com.lionfish.robo_clipping_kindle.domain.request.DownloadRequestDTO;
+import com.lionfish.robo_clipping_kindle.domain.request.DownloadRequest;
 import com.lionfish.robo_clipping_kindle.service.template.DefaultClippingTemplate;
 import com.lionfish.robo_clipping_kindle.service.template.IClippingTemplate;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public class ClippingService {
      * @param request returned by the user
      * @return ResponseData
      */
-    public static ResponseData buildResponseMessage(CommandType type, String command, DownloadRequestDTO request){
+    public static ResponseData buildResponseMessage(CommandType type, String command, DownloadRequest request){
         return CommandService.buildResponse(type, command, request.getClippings());
     }
 
@@ -41,7 +41,7 @@ public class ClippingService {
      * @param clippings String that represents 'My Clippings' file
      * @return Books containing all the clippings extracted from the provided String
      */
-    public static Books getBooksWithClippings(String clippings){
+    public static Library getBooksWithClippings(String clippings){
         IClippingTemplate template = new DefaultClippingTemplate();
         logger.info("[Message] Clipping template: Default");
         HashMap<String, List<Clipping>> fullBookClippings = new HashMap<>();
@@ -67,12 +67,12 @@ public class ClippingService {
         }
         logger.info("[Message] Total books: {}", fullBookClippings.size());
         logger.info("[Message] Total clippings: {}", totalClippings);
-        List<BookClippings> bookClippings = new ArrayList<>();
+        List<Book> bookClippings = new ArrayList<>();
         for(Map.Entry<String, List<Clipping>> entry : fullBookClippings.entrySet()){
             List<Clipping> clipps = entry.getValue();
-            bookClippings.add(new BookClippings(entry.getKey(), clipps.size(), clipps));
+            bookClippings.add(new Book(entry.getKey(), clipps.size(), clipps));
         }
-        return new Books(fullBookClippings.size(), totalClippings, bookClippings);
+        return new Library(fullBookClippings.size(), totalClippings, bookClippings);
     }
 
     /**

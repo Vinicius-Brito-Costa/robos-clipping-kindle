@@ -1,6 +1,6 @@
 package com.lionfish.robo_clipping_kindle.domain.response;
 
-import com.lionfish.robo_clipping_kindle.command.notion.block.Owner;
+import com.lionfish.robo_clipping_kindle.domain.notion.block.Owner;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

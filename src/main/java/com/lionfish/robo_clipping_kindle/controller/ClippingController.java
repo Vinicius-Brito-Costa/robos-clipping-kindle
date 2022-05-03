@@ -3,8 +3,8 @@ package com.lionfish.robo_clipping_kindle.controller;
 import com.lionfish.robo_clipping_kindle.command.CommandMapEnum;
 import com.lionfish.robo_clipping_kindle.command.ICommand;
 import com.lionfish.robo_clipping_kindle.domain.command.CommandType;
-import com.lionfish.robo_clipping_kindle.domain.request.DownloadRequestDTO;
-import com.lionfish.robo_clipping_kindle.domain.request.IntegrationRequestDTO;
+import com.lionfish.robo_clipping_kindle.domain.request.DownloadRequest;
+import com.lionfish.robo_clipping_kindle.domain.request.IntegrationRequest;
 import com.lionfish.robo_clipping_kindle.service.ClippingService;
 import com.lionfish.robo_clipping_kindle.service.NotionService;
 import org.slf4j.Logger;
@@ -24,15 +24,15 @@ public class ClippingController {
     ICommand responseCommand = CommandMapEnum.getCommandClass("internal-response").getCommandClass();
 
     /**
-     * Download clippings with especified format(eg: Docx, Json, etc...)
+     * Download clippings with specified format(eg: Docx, Json, etc...)
      * @param format desired format to process the clipping file
-     * @param downloadRequestDTO string containing all data from 'My Clippings'
+     * @param downloadRequest string containing all data from 'My Clippings'
      * @return ResponseEntity
      */
     @PostMapping("/download/{format}")
-    public Object download(@PathVariable(value = "format") String format, @RequestBody DownloadRequestDTO downloadRequestDTO){
+    public Object download(@PathVariable(value = "format") String format, @RequestBody DownloadRequest downloadRequest){
         logger.info("[Message] Download process initiated...");
-        return responseCommand.execute(ClippingService.buildResponseMessage(CommandType.DOWNLOAD, format, downloadRequestDTO));
+        return responseCommand.execute(ClippingService.buildResponseMessage(CommandType.DOWNLOAD, format, downloadRequest));
     }
 
     /**
@@ -42,7 +42,7 @@ public class ClippingController {
      * @return ResponseEntity
      */
     @PostMapping("/export/{integration}")
-    public Object export(@PathVariable(value = "integration") String integration, @RequestBody IntegrationRequestDTO integrationRequestDTO){
+    public Object export(@PathVariable(value = "integration") String integration, @RequestBody IntegrationRequest integrationRequestDTO){
         logger.info("[Message] Download process initiated...");
         return responseCommand.execute(NotionService.buildResponseMessage(CommandType.EXPORT, integration, integrationRequestDTO));
     }
