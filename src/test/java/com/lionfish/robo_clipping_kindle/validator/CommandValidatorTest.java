@@ -17,10 +17,11 @@ class CommandValidatorTest {
 
     @Test
     void invalidCommand(){
-        CommandValidator nullCommand = new CommandValidator();
-        Assertions.assertFalse(nullCommand.validate(new Command(null, CommandType.EXPORT)));
+        CommandValidator validator = new CommandValidator();
+        Assertions.assertFalse(validator.validate(new Command(null, CommandType.EXPORT)));
 
-        CommandValidator nullType = new CommandValidator();
-        Assertions.assertFalse(nullType.validate(new Command(new DownloadJSONCommand(), null)));
+        Assertions.assertFalse(validator.validate(new Command(new DownloadJSONCommand(), null)));
+
+        Assertions.assertFalse(validator.validate(null));
     }
 }

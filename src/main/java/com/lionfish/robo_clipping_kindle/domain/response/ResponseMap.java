@@ -1,5 +1,6 @@
 package com.lionfish.robo_clipping_kindle.domain.response;
 
+import lombok.Generated;
 import org.springframework.http.HttpStatus;
 
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Getter;
  * Contains the default ResponseData {@link ResponseData}
  */
 @Getter
+@Generated
 public enum ResponseMap {
 
     OK("00", HttpStatus.OK, "Request successfully processed."),

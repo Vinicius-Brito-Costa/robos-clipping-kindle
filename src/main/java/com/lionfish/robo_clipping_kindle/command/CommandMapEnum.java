@@ -22,7 +22,7 @@ public enum CommandMapEnum {
         addCommand(commandName, FQN + commandClass, type);
     }
 
-    private static void addCommand(String commandName, String commandClass, CommandType type){
+    public static void addCommand(String commandName, String commandClass, CommandType type){
         if(commandMap == null){
             commandMap = new HashMap<>();
         }

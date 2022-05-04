@@ -1,7 +1,6 @@
 package com.lionfish.robo_clipping_kindle.domain.notion;
 
-import com.lionfish.robo_clipping_kindle.domain.notion.block.IBlock;
-import com.lionfish.robo_clipping_kindle.domain.notion.block.Text;
+import com.lionfish.robo_clipping_kindle.domain.notion.block.*;
 import com.lionfish.robo_clipping_kindle.domain.notion.page.*;
 
 import java.util.UUID;

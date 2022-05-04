@@ -2,12 +2,12 @@ package com.lionfish.robo_clipping_kindle.domain.notion.block;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lionfish.robo_clipping_kindle.domain.notion.page.IFileObject;
-import com.lionfish.robo_clipping_kindle.domain.notion.page.Title;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Generated
 public class CalloutBlock implements IBlock{
 
     @Getter

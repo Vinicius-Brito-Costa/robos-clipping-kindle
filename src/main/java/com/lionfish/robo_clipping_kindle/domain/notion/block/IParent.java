@@ -1,4 +1,4 @@
-package com.lionfish.robo_clipping_kindle.domain.notion.page;
+package com.lionfish.robo_clipping_kindle.domain.notion.block;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

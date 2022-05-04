@@ -8,22 +8,25 @@ import java.util.Map;
 public enum ValidatorMapEnum {
     COMMAND("CommandValidator", CommandType.COMMAND),
     DOWNLOAD_RESPONSE("DownloadResponseValidator", CommandType.DOWNLOAD),
-    EXPORT_RESPONSE("IntegrationResponseValidator", CommandType.EXPORT);
+    INTEGRATION_RESPONSE("IntegrationResponseValidator", CommandType.INTEGRATION);
 
     private static HashMap<CommandType, String> validatorMap;
     private static final String FQN = "com.lionfish.robo_clipping_kindle.validator.";
 
     ValidatorMapEnum(String validatorClass, CommandType type){
-        addCommand(FQN + validatorClass, type);
+        addValidator(FQN + validatorClass, type);
     }
 
-    private static void addCommand(String validatorClass, CommandType type){
+    private static void addValidator(String validatorClass, CommandType type){
         if(validatorMap == null){
             validatorMap = new HashMap<>();
         }
-        validatorMap.put(type, validatorClass);
+        addValidator(type, validatorClass);
     }
 
+    public static void addValidator(CommandType type, String validatorClass){
+        validatorMap.put(type, validatorClass);
+    }
     /***
      * Returns a validator based on the provided string
      * @param type desired validator

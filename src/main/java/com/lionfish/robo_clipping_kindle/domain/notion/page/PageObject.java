@@ -2,16 +2,18 @@ package com.lionfish.robo_clipping_kindle.domain.notion.page;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lionfish.robo_clipping_kindle.domain.notion.block.IBlock;
+import com.lionfish.robo_clipping_kindle.domain.notion.block.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Generated;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Generated
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PageObject implements IBasicIdentification{
+public class PageObject implements IBasicIdentification {
 
     String object;
     String id;

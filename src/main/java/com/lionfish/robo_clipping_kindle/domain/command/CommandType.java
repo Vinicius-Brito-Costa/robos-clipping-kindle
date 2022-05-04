@@ -1,8 +1,10 @@
 package com.lionfish.robo_clipping_kindle.domain.command;
 
+import lombok.Generated;
 import lombok.Getter;
 
 @Getter
+@Generated
 public enum CommandType {
     COMMAND("command"),
     INTERNAL("internal"),

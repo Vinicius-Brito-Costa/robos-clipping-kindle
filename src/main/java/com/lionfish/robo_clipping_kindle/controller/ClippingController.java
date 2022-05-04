@@ -41,9 +41,9 @@ public class ClippingController {
      * @param integrationRequestDTO string containing all data from 'My Clippings'
      * @return ResponseEntity
      */
-    @PostMapping("/export/{integration}")
+    @PostMapping("/integration/{integration}")
     public Object export(@PathVariable(value = "integration") String integration, @RequestBody IntegrationRequest integrationRequestDTO){
-        logger.info("[Message] Download process initiated...");
+        logger.info("[Message] Integration process initiated...");
         return responseCommand.execute(NotionService.buildResponseMessage(CommandType.EXPORT, integration, integrationRequestDTO));
     }
 }

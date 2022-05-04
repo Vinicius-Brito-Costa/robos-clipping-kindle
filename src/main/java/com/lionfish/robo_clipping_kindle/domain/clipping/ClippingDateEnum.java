@@ -1,5 +1,7 @@
 package com.lionfish.robo_clipping_kindle.domain.clipping;
 
+import lombok.Generated;
+
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -7,6 +9,7 @@ import java.util.Locale;
  * Holds information and format date retrieved from clipping
  * Dates that comes from clipping are affected by language
  */
+@Generated
 public enum ClippingDateEnum {
     PT_BR("Adicionado: ", " de ", "D MMMM yyyy HH:mm:ss",new Locale("pt", "BR")),
     EN_US("Added on ", " ", "D MMMM yy HH:mm:ss", new Locale("en", "US"));

@@ -1,9 +1,10 @@
 package com.lionfish.robo_clipping_kindle.domain.notion.block;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lionfish.robo_clipping_kindle.domain.notion.page.Title;
+import lombok.Generated;
 import lombok.Getter;
 
+@Generated
 public class HeadingTwoBlock implements IBlock{
 
     @Getter

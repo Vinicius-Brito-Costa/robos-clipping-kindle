@@ -1,8 +1,10 @@
 package com.lionfish.robo_clipping_kindle.domain.notion.block;
 
+import lombok.Generated;
 import lombok.Getter;
 
 @Getter
+@Generated
 public enum BlockType {
     PARAGRAPH("paragraph"),
     HEADING_1("heading_1"),

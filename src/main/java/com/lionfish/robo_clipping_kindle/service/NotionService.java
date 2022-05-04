@@ -9,7 +9,7 @@ import com.lionfish.robo_clipping_kindle.domain.notion.block.IBlock;
 import com.lionfish.robo_clipping_kindle.domain.notion.block.Text;
 import com.lionfish.robo_clipping_kindle.domain.notion.page.PageObject;
 import com.lionfish.robo_clipping_kindle.domain.notion.page.PageObjectDTO;
-import com.lionfish.robo_clipping_kindle.domain.notion.page.Title;
+import com.lionfish.robo_clipping_kindle.domain.notion.block.Title;
 import com.lionfish.robo_clipping_kindle.domain.response.ResponseData;
 import com.lionfish.robo_clipping_kindle.domain.book.Book;
 import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;

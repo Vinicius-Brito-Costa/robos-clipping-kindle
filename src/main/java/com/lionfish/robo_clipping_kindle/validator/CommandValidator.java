@@ -11,12 +11,11 @@ public class CommandValidator implements IValidator{
     @Override
     public boolean validate(Object validatedValue){
         boolean commandTypeNotNull;
-        Command command = (Command) validatedValue;
-        try{
-            commandTypeNotNull = command.getCommandType() != null;
-        } catch (NullPointerException e){
+        if(validatedValue == null){
             return false;
         }
+        Command command = (Command) validatedValue;
+        commandTypeNotNull = command.getCommandType() != null;
         boolean commandClassIsNotNull = command.getCommandClass() != null;
         boolean valid = commandTypeNotNull && commandClassIsNotNull;
         logger.info("[Message] Is command valid? {}", valid);

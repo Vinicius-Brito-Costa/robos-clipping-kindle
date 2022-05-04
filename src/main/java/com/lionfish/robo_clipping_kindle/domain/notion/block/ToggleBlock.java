@@ -2,10 +2,11 @@ package com.lionfish.robo_clipping_kindle.domain.notion.block;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lionfish.robo_clipping_kindle.domain.notion.page.Title;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 
+@Generated
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ToggleBlock implements IBlock{
     private static final String object = "block";
