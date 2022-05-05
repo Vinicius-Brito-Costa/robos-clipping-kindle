@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtRequestFilter jwtRequestFilter;
 
     /**
-     * Sets the application UserDetailsService with our on customized one
+     * Sets the application UserDetailsService with our own customized one
      * @param auth .
      * @throws Exception .
      */

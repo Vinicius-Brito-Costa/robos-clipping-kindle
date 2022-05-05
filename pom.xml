@@ -10,13 +10,14 @@
 	<groupId>com.lionfish</groupId>
 	<artifactId>robo_clipping_kindle</artifactId>
 	<version>0.1.0</version>
-	<name>robo_clipping_kindle</name>
-	<description>Demo project for Spring Boot</description>
+	<name>Robo's Kindle Clipping</name>
+	<description>
+		Robo's kindle clippings application is a simple way to get your clippings into a desired format or in a desired service
+	</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
 	<dependencies>
-
 		<!-- Setup -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -107,11 +108,12 @@
 			<version>0.8.8</version>
 		</dependency>
 		<dependency>
-			<groupId>it.ozimov</groupId>
-			<artifactId>embedded-redis</artifactId>
-			<version>0.7.2</version>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.19</version>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>

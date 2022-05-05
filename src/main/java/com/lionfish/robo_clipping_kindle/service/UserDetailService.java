@@ -12,8 +12,8 @@ import java.util.ArrayList;
 @Service
 public class UserDetailService  implements UserDetailsService {
 
-    private static final String APPLICATION_LOGIN = "ROBO_CLIPPING_USER";
-    private static final String APPLICATION_PASSWORD = "ROBO_CLIPPING_PASSWORD";
+    public static final String APPLICATION_LOGIN = "ROBO_CLIPPING_USER";
+    public static final String APPLICATION_PASSWORD = "ROBO_CLIPPING_PASSWORD";
 
     /**
      * Loads a user by its username, the current method is only instantiating a new User object with default values

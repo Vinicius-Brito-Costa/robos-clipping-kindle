@@ -6,8 +6,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Generated;
+import lombok.NoArgsConstructor;
 
 /**
  * Clipping/Highlight contains two main informations:
@@ -15,6 +17,8 @@ import lombok.Generated;
  *  - Second contains the actual clipping/highlight.
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Generated
 public class Clipping {
 
