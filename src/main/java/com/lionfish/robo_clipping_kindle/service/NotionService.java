@@ -1,42 +1,36 @@
 package com.lionfish.robo_clipping_kindle.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lionfish.robo_clipping_kindle.domain.notion.NotionPageBuilder;
-import com.lionfish.robo_clipping_kindle.domain.notion.block.CalloutBlock;
-import com.lionfish.robo_clipping_kindle.domain.notion.block.HeadingTwoBlock;
-import com.lionfish.robo_clipping_kindle.domain.notion.block.IBlock;
-import com.lionfish.robo_clipping_kindle.domain.notion.block.Text;
-import com.lionfish.robo_clipping_kindle.domain.notion.page.PageObject;
-import com.lionfish.robo_clipping_kindle.domain.notion.page.PageObjectDTO;
-import com.lionfish.robo_clipping_kindle.domain.notion.block.Title;
-import com.lionfish.robo_clipping_kindle.domain.response.ResponseData;
 import com.lionfish.robo_clipping_kindle.domain.book.Book;
 import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
 import com.lionfish.robo_clipping_kindle.domain.command.CommandType;
+import com.lionfish.robo_clipping_kindle.domain.notion.NotionPageBuilder;
+import com.lionfish.robo_clipping_kindle.domain.notion.UploadedPages;
+import com.lionfish.robo_clipping_kindle.domain.notion.block.*;
+import com.lionfish.robo_clipping_kindle.domain.notion.page.PageObject;
+import com.lionfish.robo_clipping_kindle.domain.notion.page.PageObjectDTO;
 import com.lionfish.robo_clipping_kindle.domain.request.IntegrationRequest;
+import com.lionfish.robo_clipping_kindle.domain.response.ResponseData;
 import com.lionfish.robo_clipping_kindle.feign.NotionFeignClient;
-import feign.Feign;
-import feign.gson.GsonDecoder;
-import feign.gson.GsonEncoder;
-import feign.httpclient.ApacheHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+@Service
 public class NotionService {
 
     private static final Logger logger = LoggerFactory.getLogger(NotionService.class);
     private static final String TEXT = "text";
-    private static final int MAX_BLOCK_COUNT = 999;
-    private static final int MAX_CALLOUT_TEXT_LENGTH = 2000;
-    private static final int MAX_CALLOUT_COUNT = 10;
-    private static final String NOTION_URL = "https://api.notion.com/v1";
+    public static final int MAX_BLOCK_COUNT = 999;
+    public static final int MAX_CALLOUT_TEXT_LENGTH = 2000;
+    public static final int MAX_CALLOUT_COUNT = 10;
     private static final Integer[] BOOK_EMOTICONS = new Integer[]{0x1F4D4, 0x1F4D5, 0x1F4D6, 0x1F4D7, 0x1F4D8, 0x1F4D9, 0x1F4DA, 0x1F4D3, 0x1F4D2, 0x1F4C3, 0x1F4DC, 0x1F4C4, 0x1F4F0, 0x1F5DE, 0x1F4D1};
+
 
     private NotionService(){}
 
@@ -44,16 +38,30 @@ public class NotionService {
         return CommandService.buildResponse(type, command, request);
     }
 
+    public static String getPageID(String notionBearerToken, NotionFeignClient notion){
+        String pageId = "";
+
+        for(PageObjectDTO result : notion.search(notionBearerToken, "page", "object").getResults()){
+            if(result.getParent().isWorkspace()){
+                pageId = result.getId();
+            }
+        }
+        return pageId;
+    }
+
     /***
      * Uploads clippings on notion, each book will create a page containing all it`s clippings.
-     * If the book clippings exceed the limit of notion, a separeted call will be made to add the exceeding blocks.
+     * If the book clippings exceed the limit of notion, a separated call will be made to add the exceeding blocks.
      * @param bookClippings List of BookClippings
      * @param parentPageId The pageId that was shared by the user in the frontend
      * @param notionToken Token used to authorize the action in notion.
+     * @return Uploaded pages count
      */
-    public static void uploadBookPages(List<Book> bookClippings, String parentPageId, String notionToken){
-        NotionFeignClient notion = getNotionClient();
+    public static UploadedPages uploadBookPages(List<Book> bookClippings, String parentPageId, String notionToken, NotionFeignClient notion){
         ObjectMapper mapper = new ObjectMapper();
+        int pageCount = 0;
+        int blockCount = 0;
+        int clippingCount = 0;
         for(Book clippings : bookClippings){
             NotionPageBuilder pageBuilder = new NotionPageBuilder();
 
@@ -69,28 +77,19 @@ public class NotionService {
 
             try{
                 PageObjectDTO response = notion.createPage(notionToken, mapper.writeValueAsString(page));
+                pageCount++;
                 if(blocks.size() > MAX_BLOCK_COUNT){
                     logger.info("[Message] Appending extra blocks to page {{}}", clippings.getTitle());
                     String children = "{\"children\":" + mapper.writeValueAsString(blocks.subList(MAX_BLOCK_COUNT, blocks.size())) + "}";
                     notion.addBlockToPage(notionToken, response.getId(), children);
                 }
-            } catch (JsonProcessingException e) {
+                clippingCount += clippings.getClippings().size();
+                blockCount += blocks.size();
+            } catch (Exception e) {
                 logger.error("[Error] Error trying to create/update page", e);
             }
         }
-    }
-
-    /***
-     * Build notion feign client
-     * @return notion client
-     */
-    public static NotionFeignClient getNotionClient(){
-        return Feign
-                .builder()
-                .client(new ApacheHttpClient())
-                .encoder(new GsonEncoder())
-                .decoder(new GsonDecoder())
-                .target(NotionFeignClient.class, NOTION_URL);
+        return new UploadedPages(pageCount, blockCount, clippingCount);
     }
 
     /***
@@ -124,6 +123,10 @@ public class NotionService {
         }
         logger.info("[Message] Blocks created. Total: {{}}", blocks.size());
         return blocks;
+    }
+
+    public static String getToken(String encodedNotionToken, String clientToken, NotionFeignClient notion){
+        return notion.getToken(encodedNotionToken, clientToken, "https://webhook.site/46d396ce-5cfc-44b1-8afe-199ac8f17fe4").getAccessToken();
     }
 
     /***

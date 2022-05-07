@@ -12,7 +12,7 @@ public enum CommandMapEnum {
     INTERNAL_RESPONSE("internal-response", "ResponseCommand", CommandType.INTERNAL),
     DOWNLOAD_JSON("download-json", "DownloadJSONCommand", CommandType.DOWNLOAD),
     DOWNLOAD_DOCX("download-docx", "DownloadDocxCommand", CommandType.DOWNLOAD),
-    EXPORT_NOTION("export-notion", "NotionCommand", CommandType.EXPORT),
+    INTEGRATION_NOTION("integration-notion", "NotionCommand", CommandType.INTEGRATION),
     AUTH_NOTION("auth-notion", "NotionAuthenticationCommand", CommandType.INTEGRATION);
 
     private static HashMap<String, Command> commandMap;

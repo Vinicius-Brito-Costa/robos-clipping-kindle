@@ -11,7 +11,7 @@ import org.springframework.security.core.Authentication;
 public class AuthenticationService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
-    private static final int DEFAULT_TOKEN_EXPIRATION_TIME_IN_SECONDS = 30;
+    private static final int DEFAULT_TOKEN_EXPIRATION_TIME_IN_SECONDS = 3000;
 
     private AuthenticationService(){}
 

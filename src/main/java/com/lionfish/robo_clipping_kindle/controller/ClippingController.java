@@ -44,6 +44,6 @@ public class ClippingController {
     @PostMapping("/integration/{integration}")
     public Object export(@PathVariable(value = "integration") String integration, @RequestBody IntegrationRequest integrationRequestDTO){
         logger.info("[Message] Integration process initiated...");
-        return responseCommand.execute(NotionService.buildResponseMessage(CommandType.EXPORT, integration, integrationRequestDTO));
+        return responseCommand.execute(NotionService.buildResponseMessage(CommandType.INTEGRATION, integration, integrationRequestDTO));
     }
 }

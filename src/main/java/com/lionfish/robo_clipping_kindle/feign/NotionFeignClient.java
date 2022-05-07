@@ -7,7 +7,11 @@ import feign.Body;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Component;
 
+@Component
+@FeignClient(name = "Notion")
 @Headers({
         "Notion-Version: 2022-02-22",
         "Content-Type: application/json"
