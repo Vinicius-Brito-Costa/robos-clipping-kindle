@@ -2,18 +2,16 @@ package com.lionfish.robo_clipping_kindle.controller;
 
 import com.lionfish.robo_clipping_kindle.command.CommandMapEnum;
 import com.lionfish.robo_clipping_kindle.command.ICommand;
-import com.lionfish.robo_clipping_kindle.domain.response.ResponseData;
-import com.lionfish.robo_clipping_kindle.domain.response.ResponseMap;
 import com.lionfish.robo_clipping_kindle.domain.request.AuthenticationRequest;
 import com.lionfish.robo_clipping_kindle.domain.response.AuthenticationResponse;
+import com.lionfish.robo_clipping_kindle.domain.response.IntegrationAuthenticationResponse;
+import com.lionfish.robo_clipping_kindle.domain.response.ResponseData;
+import com.lionfish.robo_clipping_kindle.domain.response.ResponseMap;
 import com.lionfish.robo_clipping_kindle.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "api/v1/authentication",
@@ -30,6 +28,7 @@ public class AuthenticationController {
      * Generate a JWT token using a user/password
      * @return a new bearer token
      */
+    @CrossOrigin
     @PostMapping("/authenticate")
     public Object getToken(@RequestBody AuthenticationRequest tokenRequest){
 
@@ -46,5 +45,18 @@ public class AuthenticationController {
         }
 
         return responseCommand.execute(responseData);
+    }
+
+    @CrossOrigin
+    @GetMapping("/integration/{integration}")
+    public Object authenticateIntegration(@PathVariable("integration") String integration){
+        ResponseData response = new ResponseData(ResponseMap.BAD_REQUEST);
+        IntegrationAuthenticationResponse integrationResponse = AuthenticationService.integrationAuthentication(integration);
+        if(integrationResponse != null){
+            response = new ResponseData(ResponseMap.OK);
+            response.setBody(integrationResponse);
+        }
+
+        return responseCommand.execute(response);
     }
 }

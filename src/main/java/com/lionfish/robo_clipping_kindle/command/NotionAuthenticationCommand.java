@@ -17,7 +17,7 @@ public class NotionAuthenticationCommand implements ICommand {
         String url = "";
         String clientId = EnvironmentUtil.getEnvVariable(CLIENT_ID);
         url += "client_id=" + clientId;
-        url+= "&redirect_uri=" + REDIRECT;
+        url += "&redirect_uri=" + REDIRECT;
         url += "&response_type=code&owner=user";
         return new IntegrationAuthenticationResponse(BASE_URL + AUTH_URL + "?" + url);
     }

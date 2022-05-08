@@ -9,7 +9,7 @@
 <body>
     <button onclick="activateCommand('download-json')">JSON-COMMAND</button>
     <button onclick="activateCommand('download-docx')">DOCX-COMMAND</button>
-    <button onclick="activateCommand('export-notion')">NOTION-COMMAND</button>
+    <button onclick="activateCommand('integration-notion')">NOTION-COMMAND</button>
     <div id="drop-zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event)" style="background-color: blueviolet; color: white; height: 200px; display: none;">
         <p>Drag your 'My Clippings.txt' file here.</p>
     </div>
@@ -28,7 +28,7 @@
                 }
                 console.log(stateObj)
                 if(stateObj["code"] != undefined){
-                    command = "export-notion";
+                    command = "integration-notion";
                     clientToken = stateObj["code"];
                     showDropZone();
                 }
@@ -37,7 +37,7 @@
         checkState();
         function activateCommand(comm){
             let newCommand = comm.split("-")
-            if(newCommand[0] == "export"){
+            if(newCommand[0] == "integration"){
                 authorizeProcessing(newCommand[1])
             }
             command = newCommand.join("/");
@@ -47,22 +47,23 @@
         function authorizeProcessing(command){
             let map = {
                 notion: () => {
-                    let options = {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            token: "token"
-                        })
-                    }
-                    fetch("http://localhost:8080/robo/api/v1/authentication/integration/notion", options)
-                    .then(res => {
-                        if(res.ok){
-                            return res.json();
+                    getToken().then(token => {
+                        console.log(token)
+                        let options = {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json;charset=utf-8",
+                                "Authorization": token
+                            }
                         }
+                        fetch("http://localhost:8080/robo/api/v1/authentication/integration/notion", options)
+                        .then(res => {
+                            if(res.ok){
+                                return res.json();
+                            }
+                        })
+                        .then(res => location.assign(res.data.integrationUrl));
                     })
-                    .then(res => location.assign(res.data.integrationUrl));
                 }
             }
             const request = {
@@ -82,52 +83,67 @@
             console.log(fileName)
             fr = new FileReader();
             fr.onload = res => {
-                let options = {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json;charset=utf-8"
+                getToken().then(token => {
+                    let options = {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json;charset=utf-8",
+                            "Authorization": token
+                        }
                     }
-                }
-                let body = {
-                    token: fileName,
-                    clippings: res.target.result
-                }
-                if(clientToken != ""){
-                    body = {
+                    let body = {
                         token: fileName,
-                        clientToken: clientToken,
                         clippings: res.target.result
                     }
-                }
-                options["body"] = JSON.stringify(body);
-                console.log(clientToken)
-                console.log(options)
-                fetch("http://localhost:8080/robo/api/v1/" + command.split("-").join("/"), options)
-                .then(res => {
-                    if(res.ok){
-                        return res.json()
+                    if(clientToken != ""){
+                        body = {
+                            token: fileName,
+                            clientToken: clientToken,
+                            clippings: res.target.result
+                        }
                     }
-                    console.log("Errou!!!")
-                    console.log(res);
-                })
-                .then(res => {
-                    console.log(command)
-                    if(command == "download/json"){
-                        let books = {};
-                        res.data.result.forEach(book => {
-                            books[book.title] = book.clippings
-                        })
-
-                        download(new Blob([JSON.stringify(books)], {type: "application/json"}), "json");
-                    }
-                    else if(command == "download/docx"){
-                        download(new Blob([res.data.result], {type: "text/plain"}), "docx");
-                    }
+                    options["body"] = JSON.stringify(body);
+                    console.log(clientToken)
+                    console.log(options)
+                    fetch("http://localhost:8080/robo/api/v1/" + command.split("-").join("/"), options)
+                    .then(res => {
+                        if(res.ok){
+                            return res.json()
+                        }
+                        console.log("Errou!!!")
+                        console.log(res);
+                    })
+                    .then(res => {
+                        console.log(command)
+                        if(command == "download/json"){
+                            let books = {};
+                            res.data.result.forEach(book => {
+                                books[book.title] = book.clippings
+                            })
+    
+                            download(new Blob([JSON.stringify(books)], {type: "application/json"}), "json");
+                        }
+                        else if(command == "download/docx"){
+                            download(new Blob([res.data.result], {type: "text/plain"}), "docx");
+                        }
+                    })
                 });
             };
             fr.readAsText(file)
         }
-
+        function getToken(){
+            let options = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    user: "user",
+                    password: "password"
+                })
+            }
+            return fetch("http://localhost:8080/robo/api/v1/authentication/authenticate", options).then(res => res.json()).then(res => res.data.token);
+        }
         async function dropHandler(event){
             event.preventDefault()
 
