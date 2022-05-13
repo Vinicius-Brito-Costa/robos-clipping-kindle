@@ -46,7 +46,7 @@ class NotionCommandTest {
 
     @Test
     void commandExecutionIsOk(){
-        IntegrationRequest requestDTO = new IntegrationRequest("test", "test", clippings);
+        IntegrationRequest requestDTO = new IntegrationRequest("test", clippings);
         IntegrationResponse response = (IntegrationResponse) notionCommand.execute(requestDTO);
         Assertions.assertNotNull(response);
         Assertions.assertEquals(1, response.getBookCount());

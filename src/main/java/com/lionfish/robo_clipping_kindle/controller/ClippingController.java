@@ -6,6 +6,7 @@ import com.lionfish.robo_clipping_kindle.domain.command.CommandType;
 import com.lionfish.robo_clipping_kindle.domain.request.DownloadRequest;
 import com.lionfish.robo_clipping_kindle.domain.request.IntegrationRequest;
 import com.lionfish.robo_clipping_kindle.service.ClippingService;
+import com.lionfish.robo_clipping_kindle.service.IntegrationService;
 import com.lionfish.robo_clipping_kindle.service.NotionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,6 @@ public class ClippingController {
     @PostMapping("/integration/{integration}")
     public Object export(@PathVariable(value = "integration") String integration, @RequestBody IntegrationRequest integrationRequestDTO){
         logger.info("[Message] Integration process initiated...");
-        return responseCommand.execute(NotionService.buildResponseMessage(CommandType.INTEGRATION, integration, integrationRequestDTO));
+        return responseCommand.execute(IntegrationService.buildResponseMessage(CommandType.INTEGRATION, integration, integrationRequestDTO));
     }
 }

@@ -3,14 +3,11 @@ package com.lionfish.robo_clipping_kindle.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lionfish.robo_clipping_kindle.domain.book.Book;
 import com.lionfish.robo_clipping_kindle.domain.clipping.Clipping;
-import com.lionfish.robo_clipping_kindle.domain.command.CommandType;
 import com.lionfish.robo_clipping_kindle.domain.notion.NotionPageBuilder;
 import com.lionfish.robo_clipping_kindle.domain.notion.UploadedPages;
 import com.lionfish.robo_clipping_kindle.domain.notion.block.*;
 import com.lionfish.robo_clipping_kindle.domain.notion.page.PageObject;
 import com.lionfish.robo_clipping_kindle.domain.notion.page.PageObjectDTO;
-import com.lionfish.robo_clipping_kindle.domain.request.IntegrationRequest;
-import com.lionfish.robo_clipping_kindle.domain.response.ResponseData;
 import com.lionfish.robo_clipping_kindle.feign.NotionFeignClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +28,7 @@ public class NotionService {
     public static final int MAX_CALLOUT_COUNT = 10;
     private static final Integer[] BOOK_EMOTICONS = new Integer[]{0x1F4D4, 0x1F4D5, 0x1F4D6, 0x1F4D7, 0x1F4D8, 0x1F4D9, 0x1F4DA, 0x1F4D3, 0x1F4D2, 0x1F4C3, 0x1F4DC, 0x1F4C4, 0x1F4F0, 0x1F5DE, 0x1F4D1};
 
-
     private NotionService(){}
-
-    public static ResponseData buildResponseMessage(CommandType type, String command, IntegrationRequest request){
-        return CommandService.buildResponse(type, command, request);
-    }
 
     public static String getPageID(String notionBearerToken, NotionFeignClient notion){
         String pageId = "";

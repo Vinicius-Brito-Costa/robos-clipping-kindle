@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Generated
 public class IntegrationRequest {
-    private String token;
     private String clientToken;
     private String clippings;
 }
