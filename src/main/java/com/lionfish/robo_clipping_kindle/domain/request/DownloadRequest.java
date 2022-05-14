@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Generated
 public class DownloadRequest {
-    private String token;
     private String clippings;
 }

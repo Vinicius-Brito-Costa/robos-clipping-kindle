@@ -12,7 +12,6 @@ import java.util.List;
 
 class ClippingControllerTest {
 
-    String clippingToken = "biruleibe-1-0";
     String clippings = "A Philosophy of Software Design (John Ousterhout)\n" +
             "- Seu destaque na página 179 | posição 2739-2747 | Adicionado: sábado, 19 de março de 2022 09:39:58\n" +
             "\n" +
@@ -36,7 +35,7 @@ class ClippingControllerTest {
     @SuppressWarnings("unchecked")
     void controllerUsageOfDownloadJSONCommandIsOK(){
         ClippingController controller = new ClippingController();
-        DownloadRequest file = new DownloadRequest(clippingToken, clippings);
+        DownloadRequest file = new DownloadRequest(clippings);
 
         Object responseObj = controller.download("json", file);
         Assertions.assertNotNull(responseObj);

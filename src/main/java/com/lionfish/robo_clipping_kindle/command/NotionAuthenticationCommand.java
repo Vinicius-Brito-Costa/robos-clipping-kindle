@@ -9,7 +9,7 @@ import com.lionfish.robo_clipping_kindle.util.EnvironmentUtil;
 public class NotionAuthenticationCommand implements ICommand {
     private static final String BASE_URL = "https://api.notion.com/";
     private static final String AUTH_URL = "v1/oauth/authorize";
-    private static final String REDIRECT = "https://webhook.site/46d396ce-5cfc-44b1-8afe-199ac8f17fe4";
+    private static final String REDIRECT = "https://robos-kindle-clipping-frontend.vercel.app/integration/notion";
     private static final String CLIENT_ID = "NOTION_CLIENT_ID";
 
     @Override
