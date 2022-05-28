@@ -3,6 +3,7 @@ package com.lionfish.robo_clipping_kindle.command;
 import com.lionfish.robo_clipping_kindle.domain.book.Library;
 import com.lionfish.robo_clipping_kindle.domain.request.IntegrationRequest;
 import com.lionfish.robo_clipping_kindle.domain.response.IntegrationResponse;
+import com.lionfish.robo_clipping_kindle.domain.response.NotionTokenResponse;
 import com.lionfish.robo_clipping_kindle.feign.NotionFeignClient;
 import com.lionfish.robo_clipping_kindle.service.ClippingService;
 import com.lionfish.robo_clipping_kindle.service.NotionService;
@@ -11,6 +12,7 @@ import feign.Feign;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
 import feign.httpclient.ApacheHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -26,7 +28,10 @@ public class NotionCommand implements ICommand {
     public NotionCommand(){
         notion = Feign
                 .builder()
-                .client(new ApacheHttpClient())
+                .client(new ApacheHttpClient(HttpClientBuilder.create()
+                        .disableCookieManagement()
+                        .disableConnectionState()
+                        .build()))
                 .encoder(new GsonEncoder())
                 .decoder(new GsonDecoder())
                 .target(NotionFeignClient.class, NOTION_URL);
@@ -40,13 +45,14 @@ public class NotionCommand implements ICommand {
     public Object execute(Object object){
         //See: https://developers.notion.com/reference/intro
         IntegrationRequest requestDTO = (IntegrationRequest) object;
-        Library library = ClippingService.getBooksWithClippings(requestDTO.getClippings());
 
         String encodedToken =  Base64.getEncoder().encodeToString((EnvironmentUtil.getEnvVariable("NOTION_CLIENT_ID") + ":" + EnvironmentUtil.getEnvVariable("NOTION_CLIENT_PASSWORD")).getBytes(StandardCharsets.UTF_8));
-        String notionToken = NotionService.getToken(encodedToken, requestDTO.getClientToken(), notion);
-        String pageId = NotionService.getPageID(notionToken, notion);
+        NotionTokenResponse notionToken = NotionService.getToken(encodedToken, requestDTO.getClientToken(), notion);
+        String pageId = NotionService.getPageID(notionToken.getAccess_token(), notion);
 
-        NotionService.uploadBookPages(library.getBookClippings(), pageId, notionToken, notion);
+        Library library = ClippingService.getBooksWithClippings(requestDTO.getClippings());
+
+        NotionService.uploadBookPages(library.getBookClippings(), pageId, notionToken.getAccess_token(), notion);
 
         return new IntegrationResponse(library.getBookCount(), library.getTotalClippingCount());
     }

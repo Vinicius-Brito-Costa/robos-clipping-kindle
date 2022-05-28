@@ -7,7 +7,6 @@ import com.lionfish.robo_clipping_kindle.domain.request.DownloadRequest;
 import com.lionfish.robo_clipping_kindle.domain.request.IntegrationRequest;
 import com.lionfish.robo_clipping_kindle.service.ClippingService;
 import com.lionfish.robo_clipping_kindle.service.IntegrationService;
-import com.lionfish.robo_clipping_kindle.service.NotionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;

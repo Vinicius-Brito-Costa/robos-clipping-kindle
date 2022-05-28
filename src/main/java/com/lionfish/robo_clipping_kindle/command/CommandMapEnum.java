@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 /***
  * Responsible for holding and returning all commands.
+ * Be aware: Commands managed by this Enum are not managed by Spring
  */
 public enum CommandMapEnum {
     INTERNAL_RESPONSE("internal-response", "ResponseCommand", CommandType.INTERNAL),

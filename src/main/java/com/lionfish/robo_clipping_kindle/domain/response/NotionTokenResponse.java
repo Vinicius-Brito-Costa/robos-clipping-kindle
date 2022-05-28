@@ -1,6 +1,5 @@
 package com.lionfish.robo_clipping_kindle.domain.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lionfish.robo_clipping_kindle.domain.notion.block.Owner;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,17 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Generated
 public class NotionTokenResponse {
-    @JsonProperty("access_token")
-    private String accessToken;
-    @JsonProperty("token_type")
-    private String tokenType;
-    @JsonProperty("bot_id")
-    private String botId;
-    @JsonProperty("workspace_name")
-    private String workspaceName;
-    @JsonProperty("workspace_icon")
-    private String workspaceIcon;
-    @JsonProperty("workspace_id")
-    private String workspaceId;
+    private String access_token;
+    private String token_type;
+    private String bot_id;
+    private String workspace_name;
+    private String workspace_icon;
+    private String workspace_id;
     private Owner owner;
 }

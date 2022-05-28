@@ -8,6 +8,7 @@ import com.lionfish.robo_clipping_kindle.domain.notion.UploadedPages;
 import com.lionfish.robo_clipping_kindle.domain.notion.block.*;
 import com.lionfish.robo_clipping_kindle.domain.notion.page.PageObject;
 import com.lionfish.robo_clipping_kindle.domain.notion.page.PageObjectDTO;
+import com.lionfish.robo_clipping_kindle.domain.response.NotionTokenResponse;
 import com.lionfish.robo_clipping_kindle.feign.NotionFeignClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -117,8 +118,8 @@ public class NotionService {
         return blocks;
     }
 
-    public static String getToken(String encodedNotionToken, String clientToken, NotionFeignClient notion){
-        return notion.getToken(encodedNotionToken, clientToken, "https://webhook.site/46d396ce-5cfc-44b1-8afe-199ac8f17fe4").getAccessToken();
+    public static NotionTokenResponse getToken(String encodedNotionToken, String clientToken, NotionFeignClient notion){
+        return notion.getToken(encodedNotionToken, clientToken, "https://robos-kindle-clipping-frontend.vercel.app/integration/notion");
     }
 
     /***
