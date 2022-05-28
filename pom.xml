@@ -15,7 +15,7 @@
 		Robo's kindle clippings application is a simple way to get your clippings into a desired format or in a desired service
 	</description>
 	<properties>
-		<java.version>16</java.version>
+		<java.version>11</java.version>
 	</properties>
 	<dependencies>
 		<!-- Setup -->
@@ -131,9 +131,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
-				<configuration>
-					<compilerArgs>--enable-preview</compilerArgs>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
