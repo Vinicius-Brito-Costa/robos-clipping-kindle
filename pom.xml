@@ -15,7 +15,7 @@
 		Robo's kindle clippings application is a simple way to get your clippings into a desired format or in a desired service
 	</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>16</java.version>
 	</properties>
 	<dependencies>
 		<!-- Setup -->
